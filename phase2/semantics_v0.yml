@@ -1,0 +1,34 @@
+# Semantic layer v0 — night-one validation slice.
+# Full v1 (all models, governed business logic) is Phase 2's work.
+version: 1
+
+semantic_models:
+  - name: payments
+    description: One row per payment attempt; status determines revenue treatment.
+    source_table: payments
+    entities:
+      - name: payment_id
+        type: primary
+    dimensions:
+      - name: status
+        expr: status
+      - name: payment_date
+        expr: payment_date
+        time_granularity: day
+    measures:
+      - name: amount
+        expr: amount
+        agg: sum
+      - name: payment_count
+        agg: count
+
+metrics:
+  - name: settled_revenue
+    description: Revenue from settled payments only. Quirk 4.
+    model: payments
+    measure: amount
+    filter: "status = 'settled'"
+  - name: total_payments
+    description: Count of all payment attempts regardless of status.
+    model: payments
+    measure: payment_count
