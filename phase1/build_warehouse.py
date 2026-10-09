@@ -169,9 +169,6 @@ def main():
     if refunds:
         con.executemany("INSERT INTO refunds VALUES (?, ?, ?, ?)", refunds)
     print(f"inserts done in {round(_t.time()-_s,1)}s", flush=True)
-    con.executemany("INSERT INTO payments VALUES (?, ?, ?, ?, ?)", payments)
-    if refunds:
-        con.executemany("INSERT INTO refunds VALUES (?, ?, ?, ?)", refunds)
 
     # ---- sanity summary ----
     for tbl in ["customers", "products", "orders", "payments", "refunds"]:
