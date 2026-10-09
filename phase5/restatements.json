@@ -1,0 +1,46 @@
+{
+  "net_realized_revenue": {
+    "period": "2026-06",
+    "restated_on": "2026-07-15",
+    "reason": "late-arriving payments landed",
+    "changed_questions": [
+      "Q008",
+      "Q009",
+      "Q106"
+    ]
+  },
+  "settled_revenue": {
+    "period": "2026-06",
+    "restated_on": "2026-07-15",
+    "reason": "late-arriving payments landed",
+    "changed_questions": [
+      "Q001",
+      "Q003",
+      "Q025",
+      "Q108",
+      "Q110",
+      "Q111",
+      "Q112",
+      "Q208"
+    ]
+  },
+  "total_payments": {
+    "period": "2026-06",
+    "restated_on": "2026-07-15",
+    "reason": "late-arriving payments landed",
+    "changed_questions": [
+      "Q004",
+      "Q005",
+      "Q111"
+    ]
+  },
+  "total_refunds": {
+    "period": "2026-06",
+    "restated_on": "2026-07-15",
+    "reason": "late-arriving payments landed",
+    "changed_questions": [
+      "Q006",
+      "Q104"
+    ]
+  }
+}

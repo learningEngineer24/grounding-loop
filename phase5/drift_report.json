@@ -1,0 +1,162 @@
+{
+  "snapshot_a": "2026-06-30 close (late batch not yet landed)",
+  "snapshot_b": "2026-07-15 (late batch landed)",
+  "questions_compared": 50,
+  "changed_count": 15,
+  "changed": [
+    {
+      "id": "Q001",
+      "as_of_jun30": 13929701.05,
+      "as_of_jul15": 14097425.35,
+      "delta": 167724.3
+    },
+    {
+      "id": "Q003",
+      "as_of_jun30": {
+        "Q2": 7216055.26
+      },
+      "as_of_jul15": {
+        "Q2": 7383779.56
+      },
+      "delta": {
+        "Q2": 167724.3
+      }
+    },
+    {
+      "id": "Q004",
+      "as_of_jun30": 2970.0,
+      "as_of_jul15": 3000.0,
+      "delta": 30.0
+    },
+    {
+      "id": "Q005",
+      "as_of_jun30": {
+        "chargeback": 47.0,
+        "failed": 155.0,
+        "pending_settlement": 177.0,
+        "refunded": 138.0,
+        "settled": 2399.0,
+        "voided": 54.0
+      },
+      "as_of_jul15": {
+        "chargeback": 48.0,
+        "failed": 157.0,
+        "pending_settlement": 179.0,
+        "refunded": 140.0,
+        "settled": 2422.0,
+        "voided": 54.0
+      },
+      "delta": {
+        "chargeback": 1.0,
+        "failed": 2.0,
+        "pending_settlement": 2.0,
+        "refunded": 2.0,
+        "settled": 23.0,
+        "voided": 0.0
+      }
+    },
+    {
+      "id": "Q006",
+      "as_of_jun30": 635580.79,
+      "as_of_jul15": 638939.28,
+      "delta": 3358.49
+    },
+    {
+      "id": "Q008",
+      "as_of_jun30": 13294120.26,
+      "as_of_jul15": 13458486.07,
+      "delta": 164365.81
+    },
+    {
+      "id": "Q009",
+      "as_of_jun30": {
+        "Q1": 6493212.03,
+        "Q2": 6800908.23
+      },
+      "as_of_jul15": {
+        "Q1": 6493212.03,
+        "Q2": 6965274.04
+      },
+      "delta": {
+        "Q1": 0.0,
+        "Q2": 164365.81
+      }
+    },
+    {
+      "id": "Q025",
+      "as_of_jun30": {
+        "2026-06": 2282054.35
+      },
+      "as_of_jul15": {
+        "2026-06": 2449778.65
+      },
+      "delta": {
+        "2026-06": 167724.3
+      }
+    },
+    {
+      "id": "Q104",
+      "as_of_jun30": 635580.79,
+      "as_of_jul15": 638939.28,
+      "delta": 3358.49
+    },
+    {
+      "id": "Q106",
+      "as_of_jun30": 13294120.26,
+      "as_of_jul15": 13458486.07,
+      "delta": 164365.81
+    },
+    {
+      "id": "Q108",
+      "as_of_jun30": 13929701.05,
+      "as_of_jul15": 14097425.35,
+      "delta": 167724.3
+    },
+    {
+      "id": "Q110",
+      "as_of_jun30": {
+        "2026-06": 2282054.35
+      },
+      "as_of_jul15": {
+        "2026-06": 2449778.65
+      },
+      "delta": {
+        "2026-06": 167724.3
+      }
+    },
+    {
+      "id": "Q111",
+      "as_of_jun30": {
+        "total_payments": 2970.0,
+        "settled_revenue": 13929701.05
+      },
+      "as_of_jul15": {
+        "total_payments": 3000.0,
+        "settled_revenue": 14097425.35
+      },
+      "delta": {
+        "total_payments": 30.0,
+        "settled_revenue": 167724.3
+      }
+    },
+    {
+      "id": "Q112",
+      "as_of_jun30": {
+        "settled": 13929701.05
+      },
+      "as_of_jul15": {
+        "settled": 14097425.35
+      },
+      "delta": {
+        "settled": 167724.3
+      }
+    },
+    {
+      "id": "Q208",
+      "as_of_jun30": 13929701.05,
+      "as_of_jul15": 14097425.35,
+      "delta": 167724.3
+    }
+  ],
+  "golden_reproduced_on_b": true
+}
