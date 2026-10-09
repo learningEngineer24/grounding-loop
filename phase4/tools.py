@@ -51,7 +51,100 @@ def _freshness(name: str) -> dict:
             f"Figures reported before {r['restated_on']} for {r['period']} "
             f"are stale."
         )
+    m = catalog().metrics.get(name, {})
+    if m.get("freshness"):
+        out["freshness_contract"] = m["freshness"]
     return out
+
+
+def list_restatements(metric: str | None = None) -> list[dict]:
+    """Restatement log: every recorded restatement of a governed metric.
+
+    Each row names the metric, the restated period, when it was restated,
+    why, and the old vs new values. Empty list when nothing was restated
+    (or when the warehouse predates the log).
+    """
+    import duckdb
+
+    try:
+        con = duckdb.connect(str(DB_PATH), read_only=True)
+        q = ("SELECT metric, period, restated_on, reason, old_value, "
+             "new_value FROM restatement_log")
+        params: list = []
+        if metric:
+            q += " WHERE metric = ?"
+            params.append(metric)
+        rows = con.execute(q + " ORDER BY restated_on, metric",
+                           params).fetchall()
+        con.close()
+    except Exception:
+        return []
+    return [{
+        "metric": r[0], "period": str(r[1]),
+        "restated_on": str(r[2]), "reason": r[3],
+        "old_value": float(r[4]), "new_value": float(r[5]),
+        "delta": round(float(r[5]) - float(r[4]), 2),
+    } for r in rows]
+    """Freshness/restatement metadata for one metric (Phase 5 only)."""
+    if not DATA_AS_OF:
+        return {}
+    out = {"data_as_of": DATA_AS_OF}
+    r = restatements().get(name)
+    if r:
+        out["restatement"] = (
+            f"{r['period']} restated on {r['restated_on']}: {r['reason']}. "
+            f"Figures reported before {r['restated_on']} for {r['period']} "
+            f"are stale."
+        )
+    m = catalog().metrics.get(name, {})
+    if m.get("freshness"):
+        out["freshness_contract"] = m["freshness"]
+    return out
+
+
+def _freshness_warning(metric_name: str) -> str | None:
+    """Warn when the trailing period is incomplete relative to DATA_AS_OF.
+
+    Only active on Phase 5 drift runs (GROUNDING_DATA_AS_OF set). Compares
+    the latest event month in the metric's basis column against the
+    contract's completeness window.
+    """
+    if not DATA_AS_OF:
+        return None
+    cat = catalog()
+    m = cat.metrics.get(metric_name, {})
+    f = m.get("freshness")
+    if not f:
+        return None
+    model_name = m.get("model")
+    if not model_name:  # derived: use first component's model
+        dep = (m.get("depends_on") or [None])[0]
+        model_name = cat.metrics.get(dep, {}).get("model") if dep else None
+    if not model_name:
+        return None
+    table = cat.models[model_name]["source_table"]
+    basis = f["basis"]
+    try:
+        import duckdb
+        from datetime import date, timedelta
+
+        asof = date.fromisoformat(DATA_AS_OF)
+        max_date = duckdb.connect(str(DB_PATH), read_only=True).execute(
+            f"SELECT MAX({basis}) FROM {table}").fetchone()[0]
+        if max_date is None:
+            return None
+        month_end = date(max_date.year, max_date.month, 1) + timedelta(days=32)
+        month_end = month_end.replace(day=1) - timedelta(days=1)
+        final_on = month_end + timedelta(days=int(f["lag_days"]))
+        if final_on > asof:
+            return (
+                f"{month_end.strftime('%Y-%m')} is preliminary: outside the "
+                f"{f['lag_days']}-day completeness window "
+                f"(final {final_on.isoformat()}). {f.get('note', '')}"
+            )
+    except Exception:
+        return None
+    return None
 
 
 def catalog() -> SemanticCatalog:
@@ -127,4 +220,8 @@ def query_metric(metric: str, dimensions: list[str] | None = None,
     except Exception as e:  # noqa: BLE001 — surface DB errors to the agent
         return {"error": f"query failed: {e}"}
     columns = list(dimensions or []) + [metric]
-    return {"columns": columns, "rows": [list(r) for r in rows], "sql": sql}
+    result = {"columns": columns, "rows": [list(r) for r in rows], "sql": sql}
+    warning = _freshness_warning(metric)
+    if warning:
+        result["freshness_warning"] = warning
+    return result

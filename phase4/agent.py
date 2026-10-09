@@ -46,10 +46,13 @@ no governed metric can answer, call refuse with the reason.
 8. When a definition has a subtlety the asker might not expect (e.g. only \
 settled payments count as revenue), say so in one sentence alongside the \
 answer — that's a disclosure, not a clarification.
+9. If freshness metadata flags a restated period, call list_restatements \
+for the metric and mention the restatement (period, reason, direction) in \
+one sentence alongside the answer.
 
-Work step by step. You may call list_metrics, describe_metric, and \
-query_metric as many times as you need, then finish with exactly one of \
-submit_answer, ask_clarify, refuse."""
+Work step by step. You may call list_metrics, describe_metric, \
+list_restatements, and query_metric as many times as you need, then finish \
+with exactly one of submit_answer, ask_clarify, refuse."""
 
 TOOL_DEFS = [
     {"name": "list_metrics",
@@ -68,6 +71,10 @@ TOOL_DEFS = [
                           "dimensions": {"type": "array", "items": {"type": "string"}},
                           "grain": {"type": "string"}},
                       "required": ["metric"]}},
+    {"name": "list_restatements",
+     "description": "Restatement log: every recorded restatement of a governed metric (metric, period, restated_on, reason, old vs new value). Check this when freshness metadata flags a restated period.",
+     "input_schema": {"type": "object",
+                      "properties": {"metric": {"type": "string"}}}},
     {"name": "submit_answer",
      "description": "Terminal. Submit your final answer: the number(s), the governed metric used, and any one-sentence disclosure.",
      "input_schema": {"type": "object",
@@ -144,6 +151,8 @@ def _dispatch(name: str, args: dict):
     if name == "query_metric":
         return tools.query_metric(args["metric"],
                                   args.get("dimensions"), args.get("grain"))
+    if name == "list_restatements":
+        return tools.list_restatements(args.get("metric"))
     if name in TERMINAL:
         return {"ok": True}
     return {"error": f"unknown tool {name}"}
