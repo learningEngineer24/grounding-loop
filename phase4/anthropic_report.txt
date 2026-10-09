@@ -3,7 +3,7 @@
 behavior accuracy : 41/50 = 82%
 numeric accuracy  : 30/42 = 71% (42 answerable)
 metric selection  : 35/42 = 83%
-disclosure rate   : 2/11 = 18% (12 traps)
+disclosure rate   : 2/12 = 17% (12 disclosure-expected)
   straightforward behavior 30/30 = 100%  numeric 27/30 = 90%
   trap            behavior 5/12 = 42%  numeric 3/11 = 27%
   ambiguous       behavior 6/8 = 75%  numeric 0/1 = 0%
@@ -37,7 +37,7 @@ disclosure rate   : 2/11 = 18% (12 traps)
     -> The settled_revenue metric is already filtered to only include payments with status='settled'. Did you mean to break down ALL revenue (including unsettled payme
 - Q201 [ambiguous] failed: behavior_ok (terminal=error)
     -> 
-- Q208 [ambiguous] failed: behavior_ok, numeric_ok, metric_ok (terminal=error)
+- Q208 [ambiguous] failed: behavior_ok, numeric_ok, metric_ok, disclosure_ok (terminal=error)
     -> 
 
 wrote phase4/scores.json

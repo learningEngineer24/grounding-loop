@@ -124,8 +124,8 @@ def score_one(trace, q, ans) -> dict:
     else:
         result["numeric_ok"] = any(close(n, expected) for n in reported)
 
-    # --- disclosure (traps only) ---
-    if q["category"] == "trap" and qid in DISCLOSURE_KEYWORDS:
+    # --- disclosure (expected_behavior gate: 11 traps + Q208) ---
+    if q.get("expected_behavior") == "answer_with_disclosure" and qid in DISCLOSURE_KEYWORDS:
         kws = DISCLOSURE_KEYWORDS[qid]
         low = text.lower()
         hits = [k for k in kws if k in low]
@@ -156,8 +156,8 @@ def main() -> None:
     ans = [s for s in scored if s["numeric_ok"] is not None]
     print(f"numeric accuracy  : {pct([s['numeric_ok'] for s in ans])} (42 answerable)")
     print(f"metric selection  : {pct([s['metric_ok'] for s in ans])}")
-    traps = [s for s in scored if s["category"] == "trap"]
-    print(f"disclosure rate   : {pct([s['disclosure_ok'] for s in traps])} (12 traps)")
+    disc = [s for s in scored if s["disclosure_ok"] is not None]
+    print(f"disclosure rate   : {pct([s['disclosure_ok'] for s in disc])} (12 disclosure-expected)")
     for cat in ["straightforward", "trap", "ambiguous"]:
         c = [s for s in scored if s["category"] == cat]
         print(f"  {cat:15s} behavior {pct([s['behavior_ok'] for s in c])}", end="")
