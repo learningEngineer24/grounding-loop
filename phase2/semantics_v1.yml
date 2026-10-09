@@ -91,16 +91,28 @@ metrics:
     model: payments
     measure: amount
     filter: "status = 'settled'"
+    freshness:
+      lag_days: 15
+      basis: payment_date
+      note: "Late-arriving payments (Quirk 3): monthly figures not final until 15 days after month-end."
   - name: total_payments
     description: Count of all payment attempts regardless of status.
     model: payments
     measure: payment_count
+    freshness:
+      lag_days: 15
+      basis: payment_date
+      note: "Late-arriving payments (Quirk 3): monthly figures not final until 15 days after month-end."
 
   # --- refunds ---
   - name: total_refunds
     description: Actual refunded dollars (partial refunds respected).
     model: refunds
     measure: refund_amount
+    freshness:
+      lag_days: 15
+      basis: refund_date
+      note: "Refunds follow late payments (Quirk 3): monthly figures not final until 15 days after month-end."
 
   # --- realized revenue (derived) ---
   - name: net_realized_revenue
@@ -108,6 +120,10 @@ metrics:
     type: derived
     depends_on: [settled_revenue, total_refunds]
     expr: "settled_revenue - total_refunds"
+    freshness:
+      lag_days: 15
+      basis: payment_date
+      note: "Inherits the late-arrival window of its components (Quirk 3)."
 
   # --- orders ---
   - name: gross_revenue
