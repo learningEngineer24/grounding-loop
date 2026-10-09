@@ -1,0 +1,43 @@
+## Harness results — 50 questions
+
+behavior accuracy : 41/50 = 82%
+numeric accuracy  : 30/42 = 71% (42 answerable)
+metric selection  : 35/42 = 83%
+disclosure rate   : 2/11 = 18% (12 traps)
+  straightforward behavior 30/30 = 100%  numeric 27/30 = 90%
+  trap            behavior 5/12 = 42%  numeric 3/11 = 27%
+  ambiguous       behavior 6/8 = 75%  numeric 0/1 = 0%
+
+## Failures
+- Q006 [straightforward] failed: numeric_ok (terminal=submit_answer)
+    -> Total refunds in H1 2026 were $638,938.28.
+- Q015 [straightforward] failed: numeric_ok (terminal=submit_answer)
+    -> Q1 2026 net order value by month: January = $3,015,020.50, February = $2,609,018.32, March = $2,814,102.67
+- Q028 [straightforward] failed: numeric_ok (terminal=submit_answer)
+    -> $5,797.63
+- Q101 [trap] failed: behavior_ok, numeric_ok, disclosure_ok (terminal=ask_clarify)
+    -> Should Q1 2026 revenue be: (a) settled_revenue (payments that cleared, before refunds) = $6.71M, or (b) net_realized_revenue (settled minus refunds, but current
+- Q102 [trap] failed: disclosure_ok (terminal=submit_answer)
+    -> Net revenue in March 2026 was $2,223,435.94
+- Q103 [trap] failed: behavior_ok, numeric_ok, metric_ok, disclosure_ok (terminal=ask_clarify)
+    -> The available metrics don't include a direct count of distinct active customers who placed orders during H1 2026. Are you asking for: (1) the number of active (
+- Q105 [trap] failed: behavior_ok, numeric_ok, metric_ok, disclosure_ok (terminal=ask_clarify)
+    -> Do you want the average order value calculated as: total net order value divided by only the count of orders with value > $0 (excluding the $0 free-addon orders
+- Q106 [trap] failed: disclosure_ok (terminal=submit_answer)
+    -> Revenue in H1 2026 was $13,458,486.07.
+- Q107 [trap] failed: behavior_ok, numeric_ok, metric_ok, disclosure_ok (terminal=error)
+    -> 
+- Q108 [trap] failed: numeric_ok (terminal=submit_answer)
+    -> Revenue in H1 2026 including pending settlements was $18,823,006.64.
+- Q110 [trap] failed: behavior_ok, numeric_ok, metric_ok, disclosure_ok (terminal=ask_clarify)
+    -> When you ask if June revenue is "final," do you mean: (1) Is June the most recent complete month in the data? (2) Are all June transactions settled/booked? (3) 
+- Q111 [trap] failed: behavior_ok, numeric_ok, metric_ok, disclosure_ok (terminal=ask_clarify)
+    -> When you say "money processed," do you mean: (1) gross revenue (all orders before any adjustments), (2) settled revenue (payments that successfully cleared), or
+- Q112 [trap] failed: behavior_ok, numeric_ok, metric_ok, disclosure_ok (terminal=ask_clarify)
+    -> The settled_revenue metric is already filtered to only include payments with status='settled'. Did you mean to break down ALL revenue (including unsettled payme
+- Q201 [ambiguous] failed: behavior_ok (terminal=error)
+    -> 
+- Q208 [ambiguous] failed: behavior_ok, numeric_ok, metric_ok (terminal=error)
+    -> 
+
+wrote phase4/scores.json

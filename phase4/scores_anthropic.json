@@ -1,0 +1,502 @@
+[
+  {
+    "id": "Q001",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q002",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q003",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q004",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q005",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q006",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": false,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q007",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q008",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q009",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q010",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q011",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q012",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q013",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q014",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q015",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": false,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q016",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q017",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q018",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q019",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q020",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q021",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q022",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q023",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q024",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q025",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q026",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q027",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q028",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": false,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q029",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q030",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q101",
+    "category": "trap",
+    "expected_behavior": "answer_with_disclosure",
+    "terminal": "ask_clarify",
+    "behavior_ok": false,
+    "numeric_ok": false,
+    "metric_ok": true,
+    "disclosure_ok": false
+  },
+  {
+    "id": "Q102",
+    "category": "trap",
+    "expected_behavior": "answer_with_disclosure",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": false
+  },
+  {
+    "id": "Q103",
+    "category": "trap",
+    "expected_behavior": "answer_with_disclosure",
+    "terminal": "ask_clarify",
+    "behavior_ok": false,
+    "numeric_ok": false,
+    "metric_ok": false,
+    "disclosure_ok": false
+  },
+  {
+    "id": "Q104",
+    "category": "trap",
+    "expected_behavior": "answer_with_disclosure",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": true
+  },
+  {
+    "id": "Q105",
+    "category": "trap",
+    "expected_behavior": "answer_with_disclosure",
+    "terminal": "ask_clarify",
+    "behavior_ok": false,
+    "numeric_ok": false,
+    "metric_ok": false,
+    "disclosure_ok": false
+  },
+  {
+    "id": "Q106",
+    "category": "trap",
+    "expected_behavior": "answer_with_disclosure",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": true,
+    "disclosure_ok": false
+  },
+  {
+    "id": "Q107",
+    "category": "trap",
+    "expected_behavior": "answer_with_disclosure",
+    "terminal": "error",
+    "behavior_ok": false,
+    "numeric_ok": false,
+    "metric_ok": false,
+    "disclosure_ok": false
+  },
+  {
+    "id": "Q108",
+    "category": "trap",
+    "expected_behavior": "answer_with_disclosure",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": false,
+    "metric_ok": true,
+    "disclosure_ok": true
+  },
+  {
+    "id": "Q109",
+    "category": "trap",
+    "expected_behavior": "clarify",
+    "terminal": "ask_clarify",
+    "behavior_ok": true,
+    "numeric_ok": null,
+    "metric_ok": null,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q110",
+    "category": "trap",
+    "expected_behavior": "answer_with_disclosure",
+    "terminal": "ask_clarify",
+    "behavior_ok": false,
+    "numeric_ok": false,
+    "metric_ok": false,
+    "disclosure_ok": false
+  },
+  {
+    "id": "Q111",
+    "category": "trap",
+    "expected_behavior": "answer_with_disclosure",
+    "terminal": "ask_clarify",
+    "behavior_ok": false,
+    "numeric_ok": false,
+    "metric_ok": false,
+    "disclosure_ok": false
+  },
+  {
+    "id": "Q112",
+    "category": "trap",
+    "expected_behavior": "answer_with_disclosure",
+    "terminal": "ask_clarify",
+    "behavior_ok": false,
+    "numeric_ok": false,
+    "metric_ok": false,
+    "disclosure_ok": false
+  },
+  {
+    "id": "Q201",
+    "category": "ambiguous",
+    "expected_behavior": "clarify",
+    "terminal": "error",
+    "behavior_ok": false,
+    "numeric_ok": null,
+    "metric_ok": null,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q202",
+    "category": "ambiguous",
+    "expected_behavior": "clarify",
+    "terminal": "ask_clarify",
+    "behavior_ok": true,
+    "numeric_ok": null,
+    "metric_ok": null,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q203",
+    "category": "ambiguous",
+    "expected_behavior": "clarify",
+    "terminal": "ask_clarify",
+    "behavior_ok": true,
+    "numeric_ok": null,
+    "metric_ok": null,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q204",
+    "category": "ambiguous",
+    "expected_behavior": "clarify",
+    "terminal": "ask_clarify",
+    "behavior_ok": true,
+    "numeric_ok": null,
+    "metric_ok": null,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q205",
+    "category": "ambiguous",
+    "expected_behavior": "clarify",
+    "terminal": "ask_clarify",
+    "behavior_ok": true,
+    "numeric_ok": null,
+    "metric_ok": null,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q206",
+    "category": "ambiguous",
+    "expected_behavior": "refuse",
+    "terminal": "refuse",
+    "behavior_ok": true,
+    "numeric_ok": null,
+    "metric_ok": null,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q207",
+    "category": "ambiguous",
+    "expected_behavior": "clarify",
+    "terminal": "ask_clarify",
+    "behavior_ok": true,
+    "numeric_ok": null,
+    "metric_ok": null,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q208",
+    "category": "ambiguous",
+    "expected_behavior": "answer_with_disclosure",
+    "terminal": "error",
+    "behavior_ok": false,
+    "numeric_ok": false,
+    "metric_ok": false,
+    "disclosure_ok": null
+  }
+]

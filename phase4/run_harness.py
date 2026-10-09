@@ -21,13 +21,16 @@ import agent
 
 BASE = Path(__file__).resolve().parent
 
-DEFAULT_MODELS = {"anthropic": "claude-sonnet-4-5", "gemini": "gemini-3.8-flash",
+DEFAULT_MODELS = {"anthropic": "claude-haiku-4-5-20251001",
+                "anthropic_conn": "claude-haiku-4-5-20251001",
+                "gemini": "gemini-3.8-flash",
                 "baseline": "deterministic-v1"}
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--backend", choices=["anthropic", "gemini", "baseline"],
+    ap.add_argument("--backend", choices=["anthropic", "anthropic_conn",
+                                            "gemini", "baseline"],
                     default="anthropic")
     ap.add_argument("--model", default=None)
     ap.add_argument("--limit", type=int, default=0)
@@ -52,6 +55,13 @@ def main() -> None:
 
         def run_one(_client, model, qid, question):
             return agent_gemini.run_question(model, qid, question)
+
+        client = None
+    elif args.backend == "anthropic_conn":
+        import agent_anthropic
+
+        def run_one(_client, model, qid, question):
+            return agent_anthropic.run_question(model, qid, question)
 
         client = None
     else:
