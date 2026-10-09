@@ -31,10 +31,22 @@ Phase 1 ER diagram (`phase1/data_model_diagram.png`).
 - All 16 v1 metrics return byte-identical results — the v1 regression suite
   (`phase2/validate_v1.py`'s 16 checks) passes against `semantics_v2.yml`.
 
-### Deliberately not in v2
-- Joining *through* a fan-out (refused, never silently wrong).
-- Ad-hoc WHERE filters beyond a metric's own filter (unchanged from v1).
-- Derived metrics remain scalar-only.
+### Roadmap (not limitations — planned, not yet built)
+- **Derived metrics by period.** Scalar-only today; resolving means grouping
+  each ingredient CTE by the period and joining them on it.
+- **Ad-hoc WHERE filters.** Per-query structured filters (dimension +
+  operator + value), validated against the catalog and applied pre-aggregation.
+  Post-compile row filtering in Python is the interim workaround.
+
+### Known simplifications (present behavior, flagged as approximate)
+- **`churn_rate` = cancelled ÷ total.** Deliberate v1 simplification —
+  ignores `cancel_date`, period, and cohort. See below for the standard
+  resolution.
+
+### Design decisions (not gaps)
+- **Fan-out paths are refused, never silently computed.** Joining *through*
+  a one→many hop from the metric's grain raises instead of double-counting.
+  This is the intended behavior, not a missing feature.
 
 ### Golden-dataset impact
 `phase3/golden_answers.yml` is locked to definition **v1** and is untouched.
