@@ -1,0 +1,196 @@
+# Semantic layer v2 — v1 plus declared joins and a products dimension table.
+# Joins come straight from the Phase 1 ER diagram (phase1/data_model_diagram.png).
+# The compiler resolves cross-model dimensions over single- and multi-hop join
+# paths, and REFUSES paths that would fan out the metric's grain instead of
+# silently double-counting. v1 -> v2 changes: phase2/CHANGELOG.md.
+version: 2
+
+semantic_models:
+  - name: payments
+    description: One row per payment attempt; status determines revenue treatment (Quirk 4).
+    source_table: payments
+    entities:
+      - name: payment_id
+        type: primary
+    joins:
+      - to: orders
+        left_on: order_id
+        right_on: order_id
+        relationship: one_to_one
+    dimensions:
+      - name: status
+        expr: status
+      - name: payment_date
+        expr: payment_date
+        time_granularity: day
+    measures:
+      - name: amount
+        expr: amount
+        agg: sum
+      - name: payment_count
+        agg: count
+
+  - name: refunds
+    description: Refund events, dated after the payment (Quirk 1). Partial refunds possible.
+    source_table: refunds
+    entities:
+      - name: refund_id
+        type: primary
+    joins:
+      - to: payments
+        left_on: payment_id
+        right_on: payment_id
+        relationship: many_to_one
+    dimensions:
+      - name: refund_date
+        expr: refund_date
+        time_granularity: day
+    measures:
+      - name: refund_amount
+        expr: refund_amount
+        agg: sum
+
+  - name: orders
+    description: Customer orders; trials can order (Quirk 2); one $0 product exists (Quirk 6).
+    source_table: orders
+    entities:
+      - name: order_id
+        type: primary
+    joins:
+      - to: customers
+        left_on: customer_id
+        right_on: customer_id
+        relationship: many_to_one
+      - to: products
+        left_on: product_id
+        right_on: product_id
+        relationship: many_to_one
+    dimensions:
+      - name: order_date
+        expr: order_date
+        time_granularity: day
+    measures:
+      - name: gross_amount
+        expr: gross_amount
+        agg: sum
+      - name: discount_amount
+        expr: discount_amount
+        agg: sum
+      - name: net_amount
+        expr: gross_amount - discount_amount
+        agg: sum
+      - name: order_count
+        agg: count
+      - name: units
+        expr: quantity
+        agg: sum
+
+  - name: customers
+    description: Accounts; trials and cancelled are not active (Quirks 2, 5).
+    source_table: customers
+    entities:
+      - name: customer_id
+        type: primary
+    dimensions:
+      - name: account_type
+        expr: account_type
+      - name: region
+        expr: region
+      - name: plan_tier
+        expr: plan_tier
+      - name: signup_date
+        expr: signup_date
+        time_granularity: day
+    measures:
+      - name: customer_count
+        agg: count
+
+dimension_tables:
+  # Products is a dimension table, not a fact model: its grain ("one row per
+  # product") has no meaningful measures to aggregate. Its attributes slice
+  # order facts via the orders -> products join.
+  - name: products
+    source_table: products
+    dimensions:
+      - name: category
+        expr: category
+      - name: product_name
+        expr: product_name
+
+metrics:
+  # --- payments ---
+  - name: settled_revenue
+    description: Revenue from settled payments only. The naive SUM(amount) overstates by ~20%.
+    model: payments
+    measure: amount
+    filter: "status = 'settled'"
+  - name: total_payments
+    description: Count of all payment attempts regardless of status.
+    model: payments
+    measure: payment_count
+
+  # --- refunds ---
+  - name: total_refunds
+    description: Actual refunded dollars (partial refunds respected).
+    model: refunds
+    measure: refund_amount
+
+  # --- realized revenue (derived) ---
+  - name: net_realized_revenue
+    description: Settled revenue minus actual refunds. The true top line.
+    type: derived
+    depends_on: [settled_revenue, total_refunds]
+    expr: "settled_revenue - total_refunds"
+
+  # --- orders ---
+  - name: gross_revenue
+    description: Headline gross before discounts. Governed as gross, not net.
+    model: orders
+    measure: gross_amount
+  - name: total_discounts
+    description: Order-level discounts given (Quirk 7).
+    model: orders
+    measure: discount_amount
+  - name: net_order_value
+    description: Gross minus discounts, all orders.
+    model: orders
+    measure: net_amount
+  - name: total_orders
+    description: Count of orders, including $0 free-addon orders (Quirk 6).
+    model: orders
+    measure: order_count
+  - name: avg_order_value
+    description: Net order value per order, free-addon orders included in the denominator.
+    type: derived
+    depends_on: [net_order_value, total_orders]
+    expr: "net_order_value / total_orders"
+
+  # --- customers ---
+  - name: total_customers
+    description: All accounts ever created.
+    model: customers
+    measure: customer_count
+  - name: active_customers
+    description: Paid accounts only. Excludes trials (Quirk 2) and cancelled (Quirk 5).
+    model: customers
+    measure: customer_count
+    filter: "account_type = 'paid'"
+  - name: trial_customers
+    description: Trial accounts, including ones that placed orders.
+    model: customers
+    measure: customer_count
+    filter: "account_type = 'trial'"
+  - name: cancelled_customers
+    description: Cancelled accounts.
+    model: customers
+    measure: customer_count
+    filter: "account_type = 'cancelled'"
+  - name: churn_rate
+    description: Period churn = cancelled / total customers. v1 simplification, documented.
+    type: derived
+    depends_on: [cancelled_customers, total_customers]
+    expr: "cancelled_customers / total_customers"
+  - name: units_sold
+    description: Total units sold across all orders, free-addon quantities included (Quirk 6).
+    model: orders
+    measure: units
