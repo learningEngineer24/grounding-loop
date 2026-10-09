@@ -1,0 +1,8 @@
+{
+  "checked_at": "2026-10-09T19:47:50.812575+00:00",
+  "db": "warehouse.duckdb",
+  "questions_checked": 50,
+  "verdict": "CLEAN",
+  "stale_count": 0,
+  "stale": []
+}

@@ -70,5 +70,9 @@ agent must surface it (a separate, unsolved behavior).
 - `detect_drift.py` — deterministic diff → `drift_report.json`
 - `build_restatements.py` — changed questions → `restatements.json`
 - `score_drift.py` — Phase 4 scorer + `revision_ok`
+- `canary.py` — the golden set as a scheduled drift monitor: re-runs all
+  50 questions against a target DB, diffs against the locked golden
+  answers, exits 0 (CLEAN) or 1 (STALE). Demo: CLEAN on the live
+  warehouse, STALE (15 questions) on the June-30 snapshot.
 - `drift_governed_report.txt`, `drift_nolayer_report.txt` — full scorecards
 - `traces_drift_governed.jsonl`, `traces_drift_nolayer.jsonl` — raw traces
