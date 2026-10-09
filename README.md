@@ -32,6 +32,8 @@ the cent; time-grain (`DATE_TRUNC`) and dimensional grouping verified.
 
 ## Phase log
 - **Phase 1 (Oct 8):** warehouse + quirks + compiler validation. Done.
-- **Phase 2 (next):** full `semantics_v1.yml` — all models, governed business
-  logic (net revenue ex-failed/refunded/chargeback, active customer ex-trial,
-  churn as derived metric). Query until numbers are unassailable.
+- **Phase 2 (Oct 8):** full `semantics_v1.yml` — 4 models, 16 metrics
+  (13 simple + 3 derived: net_realized_revenue, avg_order_value, churn_rate).
+  All 16 validated against hand-written direct SQL (`phase2/validate_v1.py`).
+  Compiler extended for derived metrics (CTE-based, scalar-only in v1).
+- **Phase 3 (next):** golden dataset — 50 hand-validated questions.
