@@ -36,4 +36,11 @@ the cent; time-grain (`DATE_TRUNC`) and dimensional grouping verified.
   (13 simple + 3 derived: net_realized_revenue, avg_order_value, churn_rate).
   All 16 validated against hand-written direct SQL (`phase2/validate_v1.py`).
   Compiler extended for derived metrics (CTE-based, scalar-only in v1).
-- **Phase 3 (next):** golden dataset — 50 hand-validated questions.
+- **Phase 3 (Oct 8):** golden dataset — 50 questions against `semantics_v1.yml`
+  (30 straightforward / 12 traps / 8 ambiguous-adversarial). Every expected
+  value is computed through the semantic compiler, never hand-written SQL;
+  traps encode the naive answer and why it's wrong (all 7 quirks covered);
+  ambiguous questions specify clarify/refuse/answer-with-disclosure behavior.
+  `phase3/compute_answers.py` locks the answers; `phase3/validate_golden.py`
+  recomputes all 50 and fails on any drift. 50/50 reproduce.
+- **Phase 4 (next):** agent harness — run an LLM against the golden set and score it.
