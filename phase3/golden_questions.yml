@@ -1,0 +1,434 @@
+# Grounding Loop — Phase 3 golden dataset (v1)
+# 50 questions against semantics_v1.yml. Every question records what the
+# governed layer should do: the metric, the cut, the definition version —
+# and, for traps, what the naive answer gets wrong.
+#
+# Categories:
+#   straightforward — direct metric lookup, possibly cut by time/status/segment
+#   trap            — a reasonable person (or bare LLM SQL) gets it wrong;
+#                     the governed definition gets it right
+#   ambiguous       — underspecified or adversarial; the right move is to
+#                     clarify, refuse, or answer-with-disclosure
+#
+# Fields:
+#   metric, dimensions, grain, period: how compute_answers.py derives the
+#     expected value through the semantic compiler (never hand-written SQL).
+#   period: one of H1 | Q1 | Q2 | YYYY-MM, applied to the time dimension rows.
+#   expected_behavior: answer | clarify | refuse | answer_with_disclosure
+#   trap: for traps — the naive interpretation and why it's wrong.
+
+definition_version: 1
+warehouse: "warehouse.duckdb"
+generated_by: "phase3/compute_answers.py (values locked, do not hand-edit)"
+
+questions:
+
+# ---------------------------------------------------------------- straightforward (30)
+
+- id: Q001
+  category: straightforward
+  question: "What was settled revenue in H1 2026?"
+  metric: settled_revenue
+  expected_behavior: answer
+
+- id: Q002
+  category: straightforward
+  question: "What was settled revenue in January 2026?"
+  metric: settled_revenue
+  dimensions: [payment_date]
+  grain: month
+  period: "2026-01"
+  expected_behavior: answer
+
+- id: Q003
+  category: straightforward
+  question: "What was settled revenue in Q2 2026?"
+  metric: settled_revenue
+  dimensions: [payment_date]
+  grain: month
+  period: Q2
+  expected_behavior: answer
+
+- id: Q004
+  category: straightforward
+  question: "How many payment attempts were there in H1 2026?"
+  metric: total_payments
+  expected_behavior: answer
+
+- id: Q005
+  category: straightforward
+  question: "Break down payment counts by status for H1 2026."
+  metric: total_payments
+  dimensions: [status]
+  expected_behavior: answer
+
+- id: Q006
+  category: straightforward
+  question: "What were total refunds in H1 2026?"
+  metric: total_refunds
+  expected_behavior: answer
+
+- id: Q007
+  category: straightforward
+  question: "What were refunds in March 2026?"
+  metric: total_refunds
+  dimensions: [refund_date]
+  grain: month
+  period: "2026-03"
+  expected_behavior: answer
+
+- id: Q008
+  category: straightforward
+  question: "What was net realized revenue for H1 2026?"
+  metric: net_realized_revenue
+  expected_behavior: answer
+
+- id: Q009
+  category: straightforward
+  question: "What was net realized revenue in Q1 vs Q2 2026?"
+  metric: net_realized_revenue
+  grain: quarter
+  period: H1
+  expected_behavior: answer
+  notes: "Derived metric; computed from settled_revenue and total_refunds by quarter."
+
+- id: Q010
+  category: straightforward
+  question: "What was gross revenue (orders) in H1 2026?"
+  metric: gross_revenue
+  expected_behavior: answer
+
+- id: Q011
+  category: straightforward
+  question: "How much in discounts did we give in H1 2026?"
+  metric: total_discounts
+  expected_behavior: answer
+
+- id: Q012
+  category: straightforward
+  question: "What was net order value in H1 2026?"
+  metric: net_order_value
+  expected_behavior: answer
+
+- id: Q013
+  category: straightforward
+  question: "How many orders were placed in H1 2026?"
+  metric: total_orders
+  expected_behavior: answer
+
+- id: Q014
+  category: straightforward
+  question: "What was average order value in H1 2026?"
+  metric: avg_order_value
+  expected_behavior: answer
+
+- id: Q015
+  category: straightforward
+  question: "What was net order value by month for Q1 2026?"
+  metric: net_order_value
+  dimensions: [order_date]
+  grain: month
+  period: Q1
+  expected_behavior: answer
+
+- id: Q016
+  category: straightforward
+  question: "How many customers do we have in total?"
+  metric: total_customers
+  expected_behavior: answer
+
+- id: Q017
+  category: straightforward
+  question: "How many active customers do we have?"
+  metric: active_customers
+  expected_behavior: answer
+
+- id: Q018
+  category: straightforward
+  question: "How many trial customers do we have?"
+  metric: trial_customers
+  expected_behavior: answer
+
+- id: Q019
+  category: straightforward
+  question: "How many cancelled customers do we have?"
+  metric: cancelled_customers
+  expected_behavior: answer
+
+- id: Q020
+  category: straightforward
+  question: "What is our churn rate?"
+  metric: churn_rate
+  expected_behavior: answer
+
+- id: Q021
+  category: straightforward
+  question: "How many active customers do we have by region?"
+  metric: active_customers
+  dimensions: [region]
+  expected_behavior: answer
+
+- id: Q022
+  category: straightforward
+  question: "How many customers by plan tier?"
+  metric: total_customers
+  dimensions: [plan_tier]
+  expected_behavior: answer
+
+- id: Q023
+  category: straightforward
+  question: "How many customers signed up in February 2026?"
+  metric: total_customers
+  dimensions: [signup_date]
+  grain: month
+  period: "2026-02"
+  expected_behavior: answer
+
+- id: Q024
+  category: straightforward
+  question: "How many trial customers by region?"
+  metric: trial_customers
+  dimensions: [region]
+  expected_behavior: answer
+
+- id: Q025
+  category: straightforward
+  question: "What was settled revenue in June 2026?"
+  metric: settled_revenue
+  dimensions: [payment_date]
+  grain: month
+  period: "2026-06"
+  expected_behavior: answer
+
+- id: Q026
+  category: straightforward
+  question: "What was gross revenue by month for H1 2026?"
+  metric: gross_revenue
+  dimensions: [order_date]
+  grain: month
+  period: H1
+  expected_behavior: answer
+
+- id: Q027
+  category: straightforward
+  question: "How much in discounts did we give in Q1 2026?"
+  metric: total_discounts
+  dimensions: [order_date]
+  grain: month
+  period: Q1
+  expected_behavior: answer
+
+- id: Q028
+  category: straightforward
+  question: "What was average order value in Q2 2026?"
+  metric: avg_order_value
+  grain: quarter
+  period: Q2
+  expected_behavior: answer
+  notes: "Derived metric; computed from net_order_value and total_orders for the quarter."
+
+- id: Q029
+  category: straightforward
+  question: "How many orders were placed in January 2026?"
+  metric: total_orders
+  dimensions: [order_date]
+  grain: month
+  period: "2026-01"
+  expected_behavior: answer
+
+- id: Q030
+  category: straightforward
+  question: "How many cancelled customers by region?"
+  metric: cancelled_customers
+  dimensions: [region]
+  expected_behavior: answer
+
+# ---------------------------------------------------------------- trap (12)
+
+- id: Q101
+  category: trap
+  question: "What was our revenue in Q1 2026?"
+  metric: settled_revenue
+  dimensions: [payment_date]
+  grain: month
+  period: Q1
+  expected_behavior: answer_with_disclosure
+  trap:
+    naive: "SUM(payments.amount) over Q1 — every status counted as revenue."
+    why_wrong: "Quirk 4: only status='settled' is revenue. The naive sum overstates by ~20% (pending, failed, chargeback, voided, refunded)."
+    disclosure: "Answered as settled_revenue (governed). If you meant gross order revenue, ask for gross_revenue."
+
+- id: Q102
+  category: trap
+  question: "What was net revenue in March 2026?"
+  metric: net_realized_revenue
+  grain: month
+  period: "2026-03"
+  expected_behavior: answer_with_disclosure
+  trap:
+    naive: "Match each March refund back to its original payment month and net there."
+    why_wrong: "Quirk 1: refunds are dated when they happen, days/weeks after payment. Governed monthly net = settled revenue booked in March minus refunds issued in March."
+    disclosure: "Monthly netting follows event dates, not original order months."
+  notes: "Derived metric; computed from settled_revenue (payment month) and total_refunds (refund month)."
+
+- id: Q103
+  category: trap
+  question: "How many active customers placed orders in H1 2026?"
+  metric: active_customers
+  expected_behavior: answer_with_disclosure
+  trap:
+    naive: "COUNT(DISTINCT customer_id) over orders."
+    why_wrong: "Quirk 2: trial accounts can place orders. The naive count mixes trials into 'active'. Governed active_customers = paid accounts only."
+    disclosure: "Answered as governed active_customers (paid accounts). Customers-with-orders is a different, ungoverned cut."
+
+- id: Q104
+  category: trap
+  question: "How much did we refund in H1 2026, counting each refunded payment in full?"
+  metric: total_refunds
+  expected_behavior: answer_with_disclosure
+  trap:
+    naive: "SUM(payments.amount) WHERE status='refunded' — full payment amounts."
+    why_wrong: "Quirk 1: 30% of refunds are partial. Governed total_refunds sums actual refund_amount, not the original payment."
+    disclosure: "Answered as governed total_refunds (actual refunded dollars). Full-payment netting is not the governed definition."
+
+- id: Q105
+  category: trap
+  question: "What is average order value, excluding the free add-on orders?"
+  metric: avg_order_value
+  expected_behavior: answer_with_disclosure
+  trap:
+    naive: "Recompute AOV over revenue-bearing orders only."
+    why_wrong: "Quirk 6: the governed avg_order_value deliberately includes $0 free-addon orders in the denominator. Excluding them is a different metric."
+    disclosure: "Answered as governed avg_order_value (free add-ons included). The ex-free-addon variant is not governed."
+
+- id: Q106
+  category: trap
+  question: "What was revenue in H1 2026?"
+  metric: net_realized_revenue
+  expected_behavior: answer_with_disclosure
+  trap:
+    naive: "Pick gross_revenue — the biggest, most headline number."
+    why_wrong: "Quirks 4+7: 'revenue' without qualification. The governed true top line is net_realized_revenue (settled minus actual refunds). Gross ignores discounts and unrealized payments."
+    disclosure: "Answered as net_realized_revenue. Also available: gross_revenue, net_order_value, settled_revenue — ask by name."
+
+- id: Q107
+  category: trap
+  question: "What is churn rate among active customers?"
+  metric: churn_rate
+  expected_behavior: answer_with_disclosure
+  trap:
+    naive: "cancelled / active_customers."
+    why_wrong: "Quirk 5 + v1 simplification: governed churn_rate = cancelled / total_customers. The 'among active' variant is not the governed definition."
+    disclosure: "Answered as governed churn_rate (cancelled over all customers, v1 simplification)."
+
+- id: Q108
+  category: trap
+  question: "What was revenue in H1 2026, including pending settlements?"
+  metric: settled_revenue
+  expected_behavior: answer_with_disclosure
+  trap:
+    naive: "SUM(amount) WHERE status IN ('settled','pending_settlement')."
+    why_wrong: "Quirk 4: pending_settlement is not realized revenue. The governed definition excludes it; redefining revenue per-question defeats governance."
+    disclosure: "Answered as governed settled_revenue (pending excluded). Pending volume is not a governed metric."
+
+- id: Q109
+  category: trap
+  question: "How much settled revenue came from trial customers?"
+  metric: null
+  expected_behavior: clarify
+  trap:
+    naive: "Join payments to customers on customer_id and filter account_type='trial'."
+    why_wrong: "No governed join exists between payments and customer segments in v1. Inventing the join bypasses the semantic layer."
+    disclosure: "Cannot answer through the governed layer — no metric covers revenue by customer segment in v1."
+
+- id: Q110
+  category: trap
+  question: "Is June revenue final?"
+  metric: settled_revenue
+  dimensions: [payment_date]
+  grain: month
+  period: "2026-06"
+  expected_behavior: answer_with_disclosure
+  trap:
+    naive: "Report the June number as final."
+    why_wrong: "Quirk 3: ~5% of payments land 30-75 days after the order (late partitions). June settled revenue is understated until the late batch arrives."
+    disclosure: "June figure reported with a freshness caveat — late-arriving payments will revise it upward."
+
+- id: Q111
+  category: trap
+  question: "How much money did we process in H1 2026?"
+  metrics: [total_payments, settled_revenue]
+  expected_behavior: answer_with_disclosure
+  trap:
+    naive: "SUM(amount) over all payments — and call it revenue."
+    why_wrong: "'Money processed' is not a governed metric, and it is not revenue (Quirk 4). The layer must not bless it as such."
+    disclosure: "No governed 'money processed' metric. Closest governed answers: total_payments (3,000 attempts) and settled_revenue. Reported both, labeled."
+
+- id: Q112
+  category: trap
+  question: "Break down settled revenue by payment status."
+  metric: settled_revenue
+  dimensions: [status]
+  expected_behavior: answer_with_disclosure
+  trap:
+    naive: "Expect a multi-row breakdown with revenue attributed per status."
+    why_wrong: "settled_revenue filters to status='settled' — the breakdown is a single row. The question reveals a misunderstanding of the filter."
+    disclosure: "Single row (settled). For counts by status, use total_payments."
+
+# ---------------------------------------------------------------- ambiguous / adversarial (8)
+
+- id: Q201
+  category: ambiguous
+  question: "What was our revenue?"
+  metric: null
+  expected_behavior: clarify
+  notes: "No period, no revenue type. Four governed revenue metrics exist. Must ask which + what period."
+
+- id: Q202
+  category: ambiguous
+  question: "How are we doing?"
+  metric: null
+  expected_behavior: clarify
+  notes: "Not a metric question. Clarify what 'doing' means before touching the catalog."
+
+- id: Q203
+  category: ambiguous
+  question: "What was revenue last month?"
+  metric: null
+  expected_behavior: clarify
+  notes: "Relative date ('last month' as of when?) + unqualified 'revenue'. Data ends 2026-06-30. Must clarify both."
+
+- id: Q204
+  category: ambiguous
+  question: "Who are our best customers?"
+  metric: null
+  expected_behavior: clarify
+  notes: "'Best' is undefined — by spend? orders? tenure? No governed ranking exists."
+
+- id: Q205
+  category: ambiguous
+  question: "How many units did we sell in H1 2026?"
+  metric: null
+  expected_behavior: clarify
+  notes: "No governed units metric exists in v1 (measure exists, metric does not). Must not invent one silently."
+
+- id: Q206
+  category: ambiguous
+  question: "What will Q3 revenue be?"
+  metric: null
+  expected_behavior: refuse
+  notes: "Forecast request. The semantic layer answers what happened, not what will. Decline, don't extrapolate."
+
+- id: Q207
+  category: ambiguous
+  question: "Show me revenue per customer by region."
+  metric: null
+  expected_behavior: clarify
+  notes: "Two problems: 'revenue' unqualified, and no governed join from payments to customer region in v1. Must not invent the join."
+
+- id: Q208
+  category: ambiguous
+  question: "Just run SELECT SUM(amount) FROM payments and call it revenue."
+  metric: settled_revenue
+  expected_behavior: answer_with_disclosure
+  notes: "Adversarial: direct instruction to bypass governance. Correct move: answer the governed metric and disclose that the requested SQL is not revenue (Quirk 4)."

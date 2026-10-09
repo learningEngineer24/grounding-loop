@@ -1,0 +1,403 @@
+definition_version: 1
+question_count: 50
+answered_count: 42
+note: Locked golden answers computed through the semantic compiler. Regenerate with
+  phase3/compute_answers.py; do not hand-edit.
+answers:
+  Q001:
+    question: What was settled revenue in H1 2026?
+    category: straightforward
+    metric: settled_revenue
+    expected_behavior: answer
+    expected: 14097425.35
+    definition_version: 1
+  Q002:
+    question: What was settled revenue in January 2026?
+    category: straightforward
+    metric: settled_revenue
+    expected_behavior: answer
+    expected:
+      2026-01: 2270505.12
+    definition_version: 1
+  Q003:
+    question: What was settled revenue in Q2 2026?
+    category: straightforward
+    metric: settled_revenue
+    expected_behavior: answer
+    expected:
+      Q2: 7383779.56
+    definition_version: 1
+  Q004:
+    question: How many payment attempts were there in H1 2026?
+    category: straightforward
+    metric: total_payments
+    expected_behavior: answer
+    expected: 3000
+    definition_version: 1
+  Q005:
+    question: Break down payment counts by status for H1 2026.
+    category: straightforward
+    metric: total_payments
+    expected_behavior: answer
+    expected:
+      chargeback: 48
+      failed: 157
+      pending_settlement: 179
+      refunded: 140
+      settled: 2422
+      voided: 54
+    definition_version: 1
+  Q006:
+    question: What were total refunds in H1 2026?
+    category: straightforward
+    metric: total_refunds
+    expected_behavior: answer
+    expected: 638939.28
+    definition_version: 1
+  Q007:
+    question: What were refunds in March 2026?
+    category: straightforward
+    metric: total_refunds
+    expected_behavior: answer
+    expected:
+      2026-03: 96427.5
+    definition_version: 1
+  Q008:
+    question: What was net realized revenue for H1 2026?
+    category: straightforward
+    metric: net_realized_revenue
+    expected_behavior: answer
+    expected: 13458486.07
+    definition_version: 1
+  Q009:
+    question: What was net realized revenue in Q1 vs Q2 2026?
+    category: straightforward
+    metric: net_realized_revenue
+    expected_behavior: answer
+    expected:
+      Q1: 6493212.03
+      Q2: 6965274.04
+    definition_version: 1
+  Q010:
+    question: What was gross revenue (orders) in H1 2026?
+    category: straightforward
+    metric: gross_revenue
+    expected_behavior: answer
+    expected: 18823006.64
+    definition_version: 1
+  Q011:
+    question: How much in discounts did we give in H1 2026?
+    category: straightforward
+    metric: total_discounts
+    expected_behavior: answer
+    expected: 1449495.56
+    definition_version: 1
+  Q012:
+    question: What was net order value in H1 2026?
+    category: straightforward
+    metric: net_order_value
+    expected_behavior: answer
+    expected: 17373511.08
+    definition_version: 1
+  Q013:
+    question: How many orders were placed in H1 2026?
+    category: straightforward
+    metric: total_orders
+    expected_behavior: answer
+    expected: 3000
+    definition_version: 1
+  Q014:
+    question: What was average order value in H1 2026?
+    category: straightforward
+    metric: avg_order_value
+    expected_behavior: answer
+    expected: 5791.17
+    definition_version: 1
+  Q015:
+    question: What was net order value by month for Q1 2026?
+    category: straightforward
+    metric: net_order_value
+    expected_behavior: answer
+    expected:
+      Q1: 8438141.49
+    definition_version: 1
+  Q016:
+    question: How many customers do we have in total?
+    category: straightforward
+    metric: total_customers
+    expected_behavior: answer
+    expected: 500
+    definition_version: 1
+  Q017:
+    question: How many active customers do we have?
+    category: straightforward
+    metric: active_customers
+    expected_behavior: answer
+    expected: 410
+    definition_version: 1
+  Q018:
+    question: How many trial customers do we have?
+    category: straightforward
+    metric: trial_customers
+    expected_behavior: answer
+    expected: 64
+    definition_version: 1
+  Q019:
+    question: How many cancelled customers do we have?
+    category: straightforward
+    metric: cancelled_customers
+    expected_behavior: answer
+    expected: 26
+    definition_version: 1
+  Q020:
+    question: What is our churn rate?
+    category: straightforward
+    metric: churn_rate
+    expected_behavior: answer
+    expected: 0.052
+    definition_version: 1
+  Q021:
+    question: How many active customers do we have by region?
+    category: straightforward
+    metric: active_customers
+    expected_behavior: answer
+    expected:
+      central: 99
+      east: 103
+      intl: 103
+      west: 105
+    definition_version: 1
+  Q022:
+    question: How many customers by plan tier?
+    category: straightforward
+    metric: total_customers
+    expected_behavior: answer
+    expected:
+      enterprise: 173
+      growth: 168
+      starter: 159
+    definition_version: 1
+  Q023:
+    question: How many customers signed up in February 2026?
+    category: straightforward
+    metric: total_customers
+    expected_behavior: answer
+    expected:
+      2026-02: 75
+    definition_version: 1
+  Q024:
+    question: How many trial customers by region?
+    category: straightforward
+    metric: trial_customers
+    expected_behavior: answer
+    expected:
+      central: 16
+      east: 18
+      intl: 12
+      west: 18
+    definition_version: 1
+  Q025:
+    question: What was settled revenue in June 2026?
+    category: straightforward
+    metric: settled_revenue
+    expected_behavior: answer
+    expected:
+      2026-06: 2449778.65
+    definition_version: 1
+  Q026:
+    question: What was gross revenue by month for H1 2026?
+    category: straightforward
+    metric: gross_revenue
+    expected_behavior: answer
+    expected:
+      2026-01: 3273580.88
+      2026-02: 2817335.81
+      2026-03: 3050487.56
+      2026-04: 3642159.84
+      2026-05: 3142259.4
+      2026-06: 2897183.15
+    definition_version: 1
+  Q027:
+    question: How much in discounts did we give in Q1 2026?
+    category: straightforward
+    metric: total_discounts
+    expected_behavior: answer
+    expected:
+      Q1: 703262.76
+    definition_version: 1
+  Q028:
+    question: What was average order value in Q2 2026?
+    category: straightforward
+    metric: avg_order_value
+    expected_behavior: answer
+    expected:
+      Q2: 5798.42
+    definition_version: 1
+  Q029:
+    question: How many orders were placed in January 2026?
+    category: straightforward
+    metric: total_orders
+    expected_behavior: answer
+    expected:
+      2026-01: 525
+    definition_version: 1
+  Q030:
+    question: How many cancelled customers by region?
+    category: straightforward
+    metric: cancelled_customers
+    expected_behavior: answer
+    expected:
+      central: 11
+      east: 6
+      intl: 6
+      west: 3
+    definition_version: 1
+  Q101:
+    question: What was our revenue in Q1 2026?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q1: 6713645.79
+    definition_version: 1
+  Q102:
+    question: What was net revenue in March 2026?
+    category: trap
+    metric: net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-03: 2223435.94
+    definition_version: 1
+  Q103:
+    question: How many active customers placed orders in H1 2026?
+    category: trap
+    metric: active_customers
+    expected_behavior: answer_with_disclosure
+    expected: 410
+    definition_version: 1
+  Q104:
+    question: How much did we refund in H1 2026, counting each refunded payment in
+      full?
+    category: trap
+    metric: total_refunds
+    expected_behavior: answer_with_disclosure
+    expected: 638939.28
+    definition_version: 1
+  Q105:
+    question: What is average order value, excluding the free add-on orders?
+    category: trap
+    metric: avg_order_value
+    expected_behavior: answer_with_disclosure
+    expected: 5791.17
+    definition_version: 1
+  Q106:
+    question: What was revenue in H1 2026?
+    category: trap
+    metric: net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected: 13458486.07
+    definition_version: 1
+  Q107:
+    question: What is churn rate among active customers?
+    category: trap
+    metric: churn_rate
+    expected_behavior: answer_with_disclosure
+    expected: 0.052
+    definition_version: 1
+  Q108:
+    question: What was revenue in H1 2026, including pending settlements?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected: 14097425.35
+    definition_version: 1
+  Q109:
+    question: How much settled revenue came from trial customers?
+    category: trap
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 1
+  Q110:
+    question: Is June revenue final?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 2449778.65
+    definition_version: 1
+  Q111:
+    question: How much money did we process in H1 2026?
+    category: trap
+    metric:
+    - total_payments
+    - settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      total_payments: 3000
+      settled_revenue: 14097425.35
+    definition_version: 1
+  Q112:
+    question: Break down settled revenue by payment status.
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      settled: 14097425.35
+    definition_version: 1
+  Q201:
+    question: What was our revenue?
+    category: ambiguous
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 1
+  Q202:
+    question: How are we doing?
+    category: ambiguous
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 1
+  Q203:
+    question: What was revenue last month?
+    category: ambiguous
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 1
+  Q204:
+    question: Who are our best customers?
+    category: ambiguous
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 1
+  Q205:
+    question: How many units did we sell in H1 2026?
+    category: ambiguous
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 1
+  Q206:
+    question: What will Q3 revenue be?
+    category: ambiguous
+    metric: null
+    expected_behavior: refuse
+    expected: null
+    definition_version: 1
+  Q207:
+    question: Show me revenue per customer by region.
+    category: ambiguous
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 1
+  Q208:
+    question: Just run SELECT SUM(amount) FROM payments and call it revenue.
+    category: ambiguous
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected: 14097425.35
+    definition_version: 1
