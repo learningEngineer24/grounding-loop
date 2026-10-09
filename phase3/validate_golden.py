@@ -41,8 +41,8 @@ def main() -> int:
 
     # coverage: every question present, categories balanced as designed
     cats = [q["category"] for q in spec["questions"]]
-    assert len(spec["questions"]) == 50, "golden set must stay at 50 questions"
-    print(f"checked {checked}/50 locked answers against live warehouse + compiler")
+    assert len(spec["questions"]) == 127, "golden set must stay at 127 questions"
+    print(f"checked {checked}/127 locked answers against live warehouse + compiler")
     print(f"category split: {cats.count('straightforward')} straightforward / "
           f"{cats.count('trap')} trap / {cats.count('ambiguous')} ambiguous")
 
