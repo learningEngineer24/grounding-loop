@@ -47,8 +47,8 @@ def main() -> None:
     print(f"behavior accuracy : {pct([s['behavior_ok'] for s in scored])}")
     ans = [s for s in scored if s["numeric_ok"] is not None]
     print(f"numeric accuracy  : {pct([s['numeric_ok'] for s in ans])} (42 answerable)")
-    traps = [s for s in scored if s["category"] == "trap"]
-    print(f"disclosure rate   : {pct([s['disclosure_ok'] for s in traps])} (12 traps)")
+    disc = [s for s in scored if s["disclosure_ok"] is not None]
+    print(f"disclosure rate   : {pct([s['disclosure_ok'] for s in disc])} (12 disclosure-expected)")
     for cat in ["straightforward", "trap", "ambiguous"]:
         c = [s for s in scored if s["category"] == cat]
         print(f"  {cat:15s} behavior {pct([s['behavior_ok'] for s in c])}", end="")
