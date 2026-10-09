@@ -7,13 +7,15 @@ database.
 """
 from __future__ import annotations
 
+import os
 import re
 from pathlib import Path
 
 import duckdb
 
 BASE = Path(__file__).resolve().parent
-DB_PATH = BASE.parent / "warehouse.duckdb"
+# Phase 5 drift runs point this at a snapshot DB instead.
+DB_PATH = Path(os.environ.get("GROUNDING_DB", BASE.parent / "warehouse.duckdb"))
 
 _WRITE_PATTERNS = re.compile(
     r"\b(insert|update|delete|drop|create|alter|truncate|copy|attach|detach|"

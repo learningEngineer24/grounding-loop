@@ -10,6 +10,7 @@ unchanged.
 from __future__ import annotations
 
 import json
+import os
 import sys
 import urllib.request
 
@@ -53,7 +54,11 @@ the answer.
 Work step by step. You may call run_sql as many times as you need, then \
 finish with exactly one of submit_answer, ask_clarify, refuse.
 
-""" + CONTEXT
+""" + CONTEXT + (
+    f"\n\nNote: the warehouse snapshot you are querying is current as of "
+    f"{os.environ['GROUNDING_DATA_AS_OF']}."
+    if os.environ.get("GROUNDING_DATA_AS_OF") else ""
+)
 
 TOOL_DEFS = [
     {"name": "run_sql",
