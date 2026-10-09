@@ -26,8 +26,15 @@ class SemanticCatalog:
 
     def compile(self, metric_name: str, dimensions: list[str] | None = None,
                 grain: str | None = None) -> str:
-        """Compile a metric to SQL. Raises KeyError on unknown metric/dimension."""
+        """Compile a metric to SQL. Raises KeyError on unknown metric/dimension.
+
+        Derived metrics (type: derived, expr referencing other metric names)
+        compile their components as CTEs; scalar-only in v1 (no dimensional
+        breakdown of derived metrics yet).
+        """
         metric = self.metrics[metric_name]
+        if metric.get("type") == "derived":
+            return self._compile_derived(metric_name, metric)
         model = self.models[metric["model"]]
         dimensions = dimensions or []
 
@@ -56,6 +63,18 @@ class SemanticCatalog:
             sql += f"\nGROUP BY {', '.join(group_keys)}"
             sql += f"\nORDER BY {', '.join(group_keys)}"
         return sql + ";"
+
+    def _compile_derived(self, metric_name: str, metric: dict) -> str:
+        deps = metric["depends_on"]
+        ctes = []
+        for dep in deps:
+            dep_sql = self.compile(dep).rstrip().rstrip(";")
+            ctes.append(f"{dep} AS (\n{dep_sql}\n)")
+        expr = metric["expr"]
+        for dep in sorted(deps, key=len, reverse=True):
+            expr = expr.replace(dep, f"(SELECT {dep} FROM {dep})")
+        return ("WITH " + ",\n".join(ctes) +
+                f"\nSELECT {expr} AS {metric_name};")
 
     def run(self, db_path: str | Path, metric_name: str,
             dimensions: list[str] | None = None, grain: str | None = None):
