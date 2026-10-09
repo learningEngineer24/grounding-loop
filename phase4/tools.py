@@ -7,6 +7,7 @@ golden dataset is locked to definition v1).
 """
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -16,9 +17,41 @@ from semantic_compiler import SemanticCatalog  # noqa: E402
 
 BASE = Path(__file__).resolve().parent
 CATALOG_PATH = BASE.parent / "phase2" / "semantics_v1.yml"
-DB_PATH = BASE.parent / "warehouse.duckdb"
+# Phase 5 drift runs point this at a snapshot DB instead.
+DB_PATH = Path(os.environ.get("GROUNDING_DB", BASE.parent / "warehouse.duckdb"))
+# When set (Phase 5), describe_metric exposes freshness/restatement metadata.
+DATA_AS_OF = os.environ.get("GROUNDING_DATA_AS_OF")
+RESTATEMENTS_PATH = os.environ.get("GROUNDING_RESTATEMENTS")
 
 _catalog: SemanticCatalog | None = None
+_restatements: dict | None = None
+
+
+def restatements() -> dict:
+    """Metric -> restatement metadata (Phase 5 only; empty otherwise)."""
+    global _restatements
+    if _restatements is None:
+        _restatements = {}
+        if RESTATEMENTS_PATH and Path(RESTATEMENTS_PATH).exists():
+            import json
+
+            _restatements = json.loads(Path(RESTATEMENTS_PATH).read_text())
+    return _restatements
+
+
+def _freshness(name: str) -> dict:
+    """Freshness/restatement metadata for one metric (Phase 5 only)."""
+    if not DATA_AS_OF:
+        return {}
+    out = {"data_as_of": DATA_AS_OF}
+    r = restatements().get(name)
+    if r:
+        out["restatement"] = (
+            f"{r['period']} restated on {r['restated_on']}: {r['reason']}. "
+            f"Figures reported before {r['restated_on']} for {r['period']} "
+            f"are stale."
+        )
+    return out
 
 
 def catalog() -> SemanticCatalog:
@@ -55,6 +88,7 @@ def describe_metric(name: str) -> dict:
             "definition": f"{name} = {m['expr']}",
             "depends_on": m["depends_on"],
             "note": "Derived metrics are scalar-only in v1: no dimensional cuts.",
+            **_freshness(name),
         }
     model = cat.models[m["model"]]
     measure = next(x for x in model["measures"] if x["name"] == m["measure"])
@@ -71,6 +105,7 @@ def describe_metric(name: str) -> dict:
              "description": d.get("description", "")}
             for d in model.get("dimensions", [])
         ],
+        **_freshness(name),
     }
 
 
