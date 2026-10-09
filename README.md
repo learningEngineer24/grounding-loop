@@ -9,10 +9,17 @@ Full scope: `../goals/grow-professional-skillset/files/grounding-loop-project-sc
 
 ## Layout
 - `phase1/build_warehouse.py` — deterministic fixture builder (seed `20261007`)
+- `phase1/DATA_MODEL.md` — the five tables, relationships, quirks map (start here)
+- `phase1/data_model_diagram.png` — ER diagram of the warehouse
 - `warehouse.duckdb` — the fixture (gitignored in a real repo; local only)
 - `QUIRKS.md` — deliberate data quirks; raw material for trap questions
 - `phase2/semantic_compiler.py` — governed-metric YAML → DuckDB SQL compiler
-- `phase2/semantics_v0.yml` — validation slice (one model, two metrics)
+- `phase2/semantics_v1.yml` — the governed metric catalog (4 models, 16 metrics)
+- `phase2/validate_v1.py` — 16/16 compiler-vs-hand-SQL checks
+- `phase3/golden_questions.yml` — 50 eval questions (30 straightforward / 12 traps / 8 ambiguous)
+- `phase3/compute_answers.py` — locks expected answers via the compiler
+- `phase3/golden_answers.yml` — locked answers (do not hand-edit)
+- `phase3/validate_golden.py` — recomputes all 50; fails on drift
 
 ## Decision record — why hand-rolled, not MetricFlow (Oct 8, 2026)
 
