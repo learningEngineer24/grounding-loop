@@ -64,3 +64,11 @@ A v2 revision of the golden set is future work.
   `avg_order_value`, `churn_rate`).
 - Single-table metrics only; no joins.
 - Compiler validated 16/16 against hand-written SQL (`phase2/validate_v1.py`).
+
+## v2 -> v3 (2026-10-09)
+- `total_refunds`: monthly attribution changed from refund-event month
+  (`refund_date`) to original-payment month (`payment_date`, via the
+  declared refunds -> payments join). Finance: refunds should match the
+  revenue period they offset. H1 totals are unaffected; monthly breakdowns
+  move dollars across months. Metric carries a machine-readable
+  `attribution` block (time_dimension, changed_in_version, previous, reason).
