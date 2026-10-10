@@ -1,0 +1,95 @@
+{
+  "changed": [
+    {
+      "id": "Q007",
+      "question": "What were refunds in March 2026?",
+      "old": {
+        "2026-03": 96427.5
+      },
+      "new": {
+        "2026-03": 100808.58
+      }
+    },
+    {
+      "id": "Q043",
+      "question": "What were refunds in Q2 2026?",
+      "old": {
+        "Q2": 418505.52
+      },
+      "new": {
+        "Q2": 358528.03
+      }
+    },
+    {
+      "id": "Q044",
+      "question": "What were refunds in June 2026?",
+      "old": {
+        "2026-06": 200976.57
+      },
+      "new": {
+        "2026-06": 72264.45
+      }
+    },
+    {
+      "id": "Q053",
+      "question": "Show refunds by month for H1 2026.",
+      "old": {
+        "2026-01": 12860.72,
+        "2026-02": 111145.54,
+        "2026-03": 96427.5,
+        "2026-04": 87846.95,
+        "2026-05": 129682.0,
+        "2026-06": 200976.57
+      },
+      "new": {
+        "2026-01": 80422.49,
+        "2026-02": 99180.18,
+        "2026-03": 100808.58,
+        "2026-04": 115915.9,
+        "2026-05": 170347.68,
+        "2026-06": 72264.45
+      }
+    },
+    {
+      "id": "Q121",
+      "question": "What were refunds in Q2 2026?",
+      "old": {
+        "Q2": 418505.52
+      },
+      "new": {
+        "Q2": 358528.03
+      }
+    },
+    {
+      "id": "Q153",
+      "question": "What were June refunds, counting each refunded payment in full?",
+      "old": {
+        "2026-06": 200976.57
+      },
+      "new": {
+        "2026-06": 72264.45
+      }
+    },
+    {
+      "id": "Q164",
+      "question": "Were June refunds affected by the late batch?",
+      "old": {
+        "2026-06": 200976.57
+      },
+      "new": {
+        "2026-06": 72264.45
+      }
+    },
+    {
+      "id": "Q240",
+      "question": "Were May refunds restated?",
+      "old": {
+        "2026-05": 129682.0
+      },
+      "new": {
+        "2026-05": 170347.68
+      }
+    }
+  ],
+  "count": 8
+}

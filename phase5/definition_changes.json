@@ -1,0 +1,9 @@
+{
+  "total_refunds": {
+    "changed_in_version": 3,
+    "changed_on": "2026-10-09",
+    "previous": "Monthly attribution: refund event month (refund_date).",
+    "current": "Monthly attribution: original payment month (payment_date), via the declared refunds -> payments join.",
+    "reason": "Finance: refunds should match the revenue period they offset."
+  }
+}
