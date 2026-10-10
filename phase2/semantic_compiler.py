@@ -108,6 +108,26 @@ class SemanticCatalog:
         model = self.models[base]
         dimensions = dimensions or []
 
+        # Turn 5: enforce the metric's canonical time attribution. A metric
+        # whose definition names a canonical time_dimension refuses monthly
+        # (or other time) breakdowns on any OTHER time dimension of its base
+        # model — the old attribution is superseded, not an alternative.
+        # Mirrors the fan-out guard: refuse rather than silently answer the
+        # wrong question. Metrics without an attribution block are unaffected.
+        canonical = (metric.get("attribution") or {}).get("time_dimension")
+        if canonical:
+            for dname in dimensions:
+                provider, dim, _path = self._resolve_dimension(base, dname)
+                if (provider == base and dim.get("time_granularity")
+                        and dname != canonical):
+                    prev = (metric["attribution"].get("previous")
+                            or "a previous attribution")
+                    raise ValueError(
+                        f"refused: dimension '{dname}' is superseded for "
+                        f"metric '{metric_name}' ({prev}). Monthly "
+                        f"attribution is now '{canonical}'. Re-query with "
+                        f"'{canonical}'.")
+
         # resolve the measure
         measure = next(m for m in model["measures"] if m["name"] == metric["measure"])
         agg = AGG_FNS[measure.get("agg", "sum").lower()]
