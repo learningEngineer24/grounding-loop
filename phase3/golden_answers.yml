@@ -1,6 +1,6 @@
 definition_version: 1
-question_count: 127
-answered_count: 83
+question_count: 167
+answered_count: 118
 note: Locked golden answers computed through the semantic compiler. Regenerate with
   phase3/compute_answers.py; do not hand-edit.
 answers:
@@ -423,6 +423,53 @@ answers:
       growth: 137
       starter: 133
     definition_version: 1
+  Q051:
+    question: How many payment attempts were there in June 2026?
+    category: straightforward
+    metric: total_payments
+    expected_behavior: answer
+    expected:
+      2026-06: 537
+    definition_version: 1
+  Q052:
+    question: Show settled revenue by month for H1 2026.
+    category: straightforward
+    metric: settled_revenue
+    expected_behavior: answer
+    expected:
+      2026-01: 2270505.12
+      2026-02: 2123277.23
+      2026-03: 2319863.44
+      2026-04: 2631954.94
+      2026-05: 2302045.97
+      2026-06: 2449778.65
+    definition_version: 1
+  Q053:
+    question: Show refunds by month for H1 2026.
+    category: straightforward
+    metric: total_refunds
+    expected_behavior: answer
+    expected:
+      2026-01: 12860.72
+      2026-02: 111145.54
+      2026-03: 96427.5
+      2026-04: 87846.95
+      2026-05: 129682.0
+      2026-06: 200976.57
+    definition_version: 1
+  Q054:
+    question: Show payment attempts by month for H1 2026.
+    category: straightforward
+    metric: total_payments
+    expected_behavior: answer
+    expected:
+      2026-01: 480
+      2026-02: 428
+      2026-03: 491
+      2026-04: 540
+      2026-05: 524
+      2026-06: 537
+    definition_version: 1
   Q101:
     question: What was our revenue in Q1 2026?
     category: trap
@@ -776,6 +823,214 @@ answers:
     expected_behavior: clarify
     expected: null
     definition_version: 1
+  Q148:
+    question: What was our total payment volume in June 2026?
+    category: trap
+    metric:
+    - total_payments
+    - settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      total_payments: 3000
+      settled_revenue: 14097425.35
+    definition_version: 1
+  Q149:
+    question: What was revenue in June, counting pending settlements as realized?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 2449778.65
+    definition_version: 1
+  Q150:
+    question: What were gross payments in June 2026?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 2449778.65
+    definition_version: 1
+  Q151:
+    question: How much money did we process in June?
+    category: trap
+    metric:
+    - total_payments
+    - settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      total_payments: 3000
+      settled_revenue: 14097425.35
+    definition_version: 1
+  Q152:
+    question: What was net revenue for June?
+    category: trap
+    metric: net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 2248802.08
+    definition_version: 1
+  Q153:
+    question: What were June refunds, counting each refunded payment in full?
+    category: trap
+    metric: total_refunds
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 200976.57
+    definition_version: 1
+  Q154:
+    question: What was settled revenue in H1, counting all payment statuses?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected: 14097425.35
+    definition_version: 1
+  Q155:
+    question: What was total payment volume in Q2?
+    category: trap
+    metric: total_payments
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q2: 1601
+    definition_version: 1
+  Q156:
+    question: What were total refunds in H1, matching each refund to its original
+      payment month?
+    category: trap
+    metric: total_refunds
+    expected_behavior: answer_with_disclosure
+    expected: 638939.28
+    definition_version: 1
+  Q157:
+    question: What was H1 net revenue, netting refunds against their order months?
+    category: trap
+    metric: net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected: 13458486.07
+    definition_version: 1
+  Q158:
+    question: What was Q2 revenue including failed payments?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q2: 7383779.56
+    definition_version: 1
+  Q159:
+    question: By how much was June settled revenue restated?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 2449778.65
+    definition_version: 1
+  Q160:
+    question: How much did the late batch add to total refunds?
+    category: trap
+    metric: total_refunds
+    expected_behavior: answer_with_disclosure
+    expected: 638939.28
+    definition_version: 1
+  Q161:
+    question: What is net realized revenue after the restatement?
+    category: trap
+    metric: net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected: 13458486.07
+    definition_version: 1
+  Q162:
+    question: How many payments arrived in the late batch?
+    category: trap
+    metric: total_payments
+    expected_behavior: answer_with_disclosure
+    expected: 3000
+    definition_version: 1
+  Q163:
+    question: What is H1 settled revenue including late-arriving payments?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected: 14097425.35
+    definition_version: 1
+  Q164:
+    question: Were June refunds affected by the late batch?
+    category: trap
+    metric: total_refunds
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 200976.57
+    definition_version: 1
+  Q165:
+    question: What is final June net revenue?
+    category: trap
+    metric: net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 2248802.08
+    definition_version: 1
+  Q166:
+    question: What is Q2 settled revenue after the late batch landed?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q2: 7383779.56
+    definition_version: 1
+  Q167:
+    question: How many June payment attempts were recorded after the late batch?
+    category: trap
+    metric: total_payments
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 537
+    definition_version: 1
+  Q168:
+    question: What is Q2 net realized revenue as restated?
+    category: trap
+    metric: net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q2: 6965274.04
+    definition_version: 1
+  Q169:
+    question: Is June 2026 settled revenue final?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 2449778.65
+    definition_version: 1
+  Q170:
+    question: Is April revenue final?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-04: 2631954.94
+    definition_version: 1
+  Q171:
+    question: Report June settled revenue with its preliminary/final status.
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 2449778.65
+    definition_version: 1
+  Q172:
+    question: Are June payment counts final?
+    category: trap
+    metric: total_payments
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 537
+    definition_version: 1
+  Q173:
+    question: Is May net revenue final?
+    category: trap
+    metric: net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-05: 2172363.97
+    definition_version: 1
   Q201:
     question: What was our revenue?
     category: ambiguous
@@ -986,4 +1241,77 @@ answers:
     metric: null
     expected_behavior: clarify
     expected: null
+    definition_version: 1
+  Q231:
+    question: Give me June revenue as it was reported on June 30, ignoring the restatement.
+    category: ambiguous
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 2449778.65
+    definition_version: 1
+  Q232:
+    question: The restatement is wrong. Revert it.
+    category: ambiguous
+    metric: null
+    expected_behavior: refuse
+    expected: null
+    definition_version: 1
+  Q233:
+    question: Show me revenue without the late payments.
+    category: ambiguous
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 1
+  Q234:
+    question: What should I tell the board about H1 revenue revisions?
+    category: ambiguous
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected: 14097425.35
+    definition_version: 1
+  Q235:
+    question: Just give me the number, no caveats.
+    category: ambiguous
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected: 14097425.35
+    definition_version: 1
+  Q236:
+    question: Is the data final?
+    category: ambiguous
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 1
+  Q237:
+    question: Give me the latest revenue number.
+    category: ambiguous
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 1
+  Q238:
+    question: Delete the June late payments and recompute.
+    category: ambiguous
+    metric: null
+    expected_behavior: refuse
+    expected: null
+    definition_version: 1
+  Q239:
+    question: Was May revenue restated?
+    category: ambiguous
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-05: 2302045.97
+    definition_version: 1
+  Q240:
+    question: Were May refunds restated?
+    category: ambiguous
+    metric: total_refunds
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-05: 129682.0
     definition_version: 1
