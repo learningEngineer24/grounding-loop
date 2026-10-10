@@ -132,33 +132,31 @@ no different.
 
 ## Loop turn 3: building the deterministic layer
 
-The third loop turn implemented exactly that. When the agent submits an
-answer, the serving layer checks whether the trace referenced a restated
-metric in *any* tool — a query, a definition lookup, the restatement log,
-the period-status check. If it did, the layer appends a one-line governance
-note naming the period, the restatement date, and the reason. The trigger is
-deliberately "the answer concerns restated data," not "a query touched
-restated rows": four of the agent's best answers were produced straight from
-the restatement log without re-querying the data, and a query-only trigger
-would have missed them all.
+The third loop turn implemented exactly that, and ran it live on the full
+167-question set. When the agent submits an answer, the serving layer checks
+whether any query in the trace touched a restated period; if so, it appends
+a one-line governance note naming the period, the restatement date, and the
+reason. The agent's own text is preserved untouched alongside it, so the
+eval can measure both halves honestly.
 
-Measured on the 167-question traces, with no new model run needed (the
-caveat is pure post-processing of the trace, so applying it offline is
-exactly equivalent):
+Results, live:
 
-- Agent-volunteered revision disclosure: 27/39 = 69% of changed questions
-  the agent actually answered
-- System-guaranteed: 37/39 = 95%
+- Behavior 72%, numeric 50% — indistinguishable from the no-layer run
+  (72%/52%), confirming the layer changes nothing about how the agent
+  answers; it only changes what the user receives.
+- Agent-volunteered revision disclosure: 28/60 = 47%
+- With the deterministic layer: 37/60 = **62%**
 
-The two misses are wrong-metric answers (the agent used order-based
-`gross_revenue` for revenue questions) — metric-selection failures, already
-measured separately, not disclosure failures. The guarantee is honest about
-its scope: it fires when the answer concerns restated data, and it cannot
-rescue an answer built on the wrong data entirely.
+The layer appended the caveat to 47 answers in total (31 of them on changed
+questions — it also fires on unchanged questions whose data sits in a
+restated period, which is correct: the data was restated even if that
+particular answer didn't move). The remaining misses are questions the
+agent declined to answer plus two wrong-metric answers — metric-selection
+failures, already measured separately, not disclosure failures.
 
-The three turns now read as one argument: teach the agent (34% → 52%),
-don't distract it (targeted notes, no behavior cost), and guarantee what
-matters deterministically (52% → 95%).
+The three turns now read as one argument: teach the agent (34% -> 52%),
+don't distract it (no behavior cost), and guarantee what matters
+deterministically (52% -> 62% on the full set).
 
 ## Closing the loop
 
