@@ -1,28 +1,65 @@
 # The Grounding Loop
 
-Practice build of the essay's feedback loop: governed semantic metrics + evals
-on a toy DuckDB warehouse, proving an agent's answers verifiable and catching
-drift before a board deck goes wrong. Summit material for Nov 2.
+A working build of the feedback loop from [Data Engineering in the Agent
+Era](https://neboiwenofu.com/writings/data-engineering-agent-era.html):
+a governed semantic layer over a synthetic DuckDB warehouse, a golden
+dataset of trap questions, an agent harness that scores whether the layer
+keeps answers honest, and drift machinery that catches the layer going
+stale. Small enough to hold in your head, real enough to produce genuine
+failures.
 
-Full scope: `../goals/grow-professional-skillset/files/grounding-loop-project-scope.md`
-(this is a working copy; scope is the source of truth).
+Two write-ups tell the story: [Part 1: The Grounding Loop](WRITEUP_DRAFT_PART1.md)
+(phases 1–4, the measurement story) and [Part 2: Managing Drift](WRITEUP_DRAFT_PART2.md)
+(phase 5, the operations story). Both are drafts under review.
+
+## Results at a glance
+
+- **The layer's value, measured:** the same model answering the same 50
+  questions scores +12 points of behavior and +11 of numeric accuracy with
+  governed metrics vs. writing its own SQL, even when the no-layer agent
+  gets the full schema and documented quirks as context. Enforcement beats
+  documentation.
+- **The $0 floor:** a deterministic baseline (no LLM, keyword-to-metric
+  matching) hits 84% behavior / 81% numeric. Anything a model scores above
+  that is the marginal value of the model. Its value is judgment: 75% on
+  ambiguous questions vs. the baseline's 12%.
+- **Disclosure under drift:** when late-arriving payments restated June
+  revenue (+$167,724), agent-volunteered revision disclosure went 4% → 34%
+  with a restatement log, then to 66% (audit-corrected) with a deterministic
+  answer-level disclosure layer. No measurable behavior cost.
+- **Meaning drift:** when finance redefined `total_refunds` attribution
+  (no rows changed), the canary caught 8 changed answers but the agent used
+  the new meaning 0/8 times despite reading the definition. The fix was
+  platform enforcement: the compiler now refuses superseded time
+  dimensions, the way the fan-out guard refuses bad joins.
+- **Cost:** about $11 of a $20 Anthropic budget across all measured runs.
 
 ## Layout
-- `phase1/build_warehouse.py` — deterministic fixture builder (seed `20261007`)
-- `phase1/DATA_MODEL.md` — the five tables, relationships, quirks map (start here)
-- `phase1/data_model_diagram.png` — ER diagram of the warehouse
-- `warehouse.duckdb` — the fixture (gitignored in a real repo; local only)
-- `QUIRKS.md` — deliberate data quirks; raw material for trap questions
-- `phase2/semantic_compiler.py` — governed-metric YAML → DuckDB SQL compiler
-- `phase2/semantics_v1.yml` — the governed metric catalog (4 models, 16 metrics)
-- `phase2/semantics_v2.yml` — v1 + declared joins, products dimension table, `units_sold`
-- `phase2/CHANGELOG.md` — what changed between definition versions
-- `phase2/validate_v1.py` — 16/16 compiler-vs-hand-SQL checks
-- `phase2/validate_v2.py` — 24/24: v1 regression + join + fan-out refusal checks
-- `phase3/golden_questions.yml` — 50 eval questions (30 straightforward / 12 traps / 8 ambiguous)
-- `phase3/compute_answers.py` — locks expected answers via the compiler
-- `phase3/golden_answers.yml` — locked answers (do not hand-edit)
-- `phase3/validate_golden.py` — recomputes all 50; fails on drift
+
+- `phase1/` — deterministic warehouse fixture (500 customers, 3,000
+  payments, 140 refunds) plus `QUIRKS.md`: seven documented data quirks that
+  seed the trap questions. Start with `phase1/DATA_MODEL.md`.
+- `phase2/` — hand-rolled YAML→SQL semantic compiler (`semantic_compiler.py`),
+  governed metric catalogs (`semantics_v1.yml`, `semantics_v2.yml`,
+  `semantics_v3.yml`), `CHANGELOG.md`, and validators (16/16 on v1, 24/24
+  on v2 including fan-out refusals).
+- `phase3/` — golden dataset: `golden_questions.yml` (167 questions, 166 scored post-audit:
+  54 straightforward / 72 trap / 41 ambiguous), `compute_answers.py` (locks
+  expected answers *through the compiler*, never hand-typed),
+  `golden_answers.yml`, `validate_golden.py`.
+- `phase4/` — agent harness: read-only metric tools, terminal actions
+  (`submit_answer` / `ask_clarify` / `refuse`), four-dimension scorer
+  (behavior, numeric, disclosure, metric selection). Backends: deterministic
+  baseline, Anthropic (Haiku). See `phase4/HARNESS.md`.
+- `phase4b/` — no-layer ablation: the same model writes its own SELECT-only
+  SQL against the raw warehouse. Measures enforcement, not knowledge.
+- `phase5/` — drift machinery: snapshot simulator (`simulate_drift.py`),
+  golden-set canary (`canary.py`), restatement log (`restatements.json`,
+  `list_restatements` tool), freshness contracts, definition-change log
+  (`definition_changes.json`), expanded exam, and all run traces
+  (`traces_*.jsonl`) and reports.
+- `WRITEUP_DRAFT_PART1.md`, `WRITEUP_DRAFT_PART2.md` — the two project
+  write-ups (drafts).
 
 ## Decision record — why hand-rolled, not MetricFlow (Oct 8, 2026)
 
@@ -41,34 +78,42 @@ touches raw SQL. Validated: compiled `settled_revenue` matches direct SQL to
 the cent; time-grain (`DATE_TRUNC`) and dimensional grouping verified.
 
 ## Phase log
+
 - **Phase 1 (Oct 8):** warehouse + quirks + compiler validation. Done.
-- **Phase 2 (Oct 8):** full `semantics_v1.yml` — 4 models, 16 metrics
-  (13 simple + 3 derived: net_realized_revenue, avg_order_value, churn_rate).
-  All 16 validated against hand-written direct SQL (`phase2/validate_v1.py`).
-  Compiler extended for derived metrics (CTE-based, scalar-only in v1).
-- **Phase 2b / semantics v2 (Oct 8):** joins from the Phase 1 ER diagram —
-  `orders→customers`, `orders→products`, `payments→orders`, `refunds→payments`;
-  `products` as a dimension table; new `units_sold` metric; compiler resolves
-  multi-hop join paths and *refuses* fan-out (one→many) instead of silently
-  double-counting. 24/24 checks (`phase2/validate_v2.py`: 16 v1 regression +
-  6 join + 2 refusal). Changes: `phase2/CHANGELOG.md`.
-- **Phase 3 (Oct 8):** golden dataset — 50 questions against `semantics_v1.yml`
-  (30 straightforward / 12 traps / 8 ambiguous-adversarial). Every expected
-  value is computed through the semantic compiler, never hand-written SQL;
-  traps encode the naive answer and why it's wrong (all 7 quirks covered);
-  ambiguous questions specify clarify/refuse/answer-with-disclosure behavior.
-  `phase3/compute_answers.py` locks the answers; `phase3/validate_golden.py`
-  recomputes all 50 and fails on any drift. 50/50 reproduce.
-- **Phase 4 (Oct 9):** agent harness (`phase4/`: tools, agents, runner,
-  4-dimension scorer — behavior / numeric / disclosure / metric selection).
-  Deterministic baseline, no API: behavior 42/50 (84%), numeric 34/42 (81%),
-  metric selection 39/42 (93%), disclosure 1/11 (9%). Gemini backend built on
-  the free tier but the run is blocked: free-tier quota exhausted (429s), plus
-  a harness bug found and fixed during the retry (thoughtSignature lives at
-  the response *part* level, not inside functionCall). Gemini scorecard still
-  open.
-- **Phase 4b (Oct 9):** no-layer ablation (`phase4b/`) — the same model
-  answers the same 50 questions by writing its own SQL (SELECT-only
-  `run_sql`, schema DDL + full `QUIRKS.md` as context) instead of calling
-  governed metrics; isolates the semantic layer's *enforcement* value vs raw
-  SQL. Run pending on the same Gemini quota.
+- **Phase 2 (Oct 8):** `semantics_v1.yml` (4 models, 16 metrics), validated
+  16/16 against hand-written SQL. **v2** adds declared joins from the ER
+  diagram; the compiler resolves multi-hop paths and *refuses* fan-out
+  (one→many) instead of silently double-counting. 24/24 checks.
+- **Phase 3 (Oct 8–9):** golden dataset, 50 questions keyed to semantics v1.
+  Every expected value computed through the compiler; traps encode the naive
+  answer and why it's wrong. Later audited and expanded to 167 questions (166 scored;
+  54 straightforward / 72 trap / 41 ambiguous); seven golden corrections,
+  delta-answer support in `compute_answers.py`.
+- **Phase 4 (Oct 9):** agent harness + deterministic baseline (84% behavior,
+  81% numeric, $0) + Haiku governed run (82% / 71%) + no-layer ablation
+  (70% / 60%). The +12/+11 delta is the enforcement value of compiled
+  definitions over documented knowledge.
+- **Phase 5, turn 1 (Oct 9):** drift exercise. Thirty late-arriving payments
+  restate June revenue +$167,724. Freshness contracts (prevent), golden-set
+  canary (detect), restatement log + `list_restatements` (communicate).
+  Three runs each: disclosure 4% → 34%, no behavior cost.
+- **Phase 5, turn 2 (Oct 9):** targeted inline restatement notes (fire only
+  when the query touches the restated period) + `period_status` virtual
+  metric. Exam grows 127 → 167 on drift findings. Revision disclosure
+  34% → 52% on identical questions, behavior 73% → 76%: push safety-critical
+  context, pull the rest.
+- **Phase 5, turn 3 (Oct 9):** deterministic answer-level disclosure. The
+  serving layer appends a one-line governance note to any answer whose
+  queries touched a restated period. Live full-exam run: 62% revision
+  disclosure (66% audit-corrected). Distinguish agent-volunteered disclosure
+  (capability) from system-guaranteed disclosure (safety).
+- **Phase 5, turn 4 (Oct 9):** meaning drift. Semantics v3 redefines
+  `total_refunds` monthly attribution (refund month → original payment
+  month); zero rows change. Canary catches 8 changed answers; the agent uses
+  the new meaning 0/8 despite reading the definition. Metadata visibility is
+  not enforcement.
+- **Phase 5, turn 5 (Oct 9–10):** platform enforcement. The compiler refuses
+  queries on superseded time dimensions with a redirect to the canonical
+  one. Re-run: 5/8 changed questions return exactly the v3 numbers, one
+  asks a thoughtful clarify. Governance is a platform property, not an
+  agent capability to be prompted into existence.
