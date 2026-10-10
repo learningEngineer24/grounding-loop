@@ -1,6 +1,6 @@
 definition_version: 1
 question_count: 167
-answered_count: 118
+answered_count: 115
 note: Locked golden answers computed through the semantic compiler. Regenerate with
   phase3/compute_answers.py; do not hand-edit.
 answers:
@@ -853,13 +853,9 @@ answers:
   Q151:
     question: How much money did we process in June?
     category: trap
-    metric:
-    - total_payments
-    - settled_revenue
-    expected_behavior: answer_with_disclosure
-    expected:
-      total_payments: 3000
-      settled_revenue: 14097425.35
+    metric: null
+    expected_behavior: clarify
+    expected: null
     definition_version: 1
   Q152:
     question: What was net revenue for June?
@@ -887,10 +883,9 @@ answers:
   Q155:
     question: What was total payment volume in Q2?
     category: trap
-    metric: total_payments
-    expected_behavior: answer_with_disclosure
-    expected:
-      Q2: 1601
+    metric: null
+    expected_behavior: clarify
+    expected: null
     definition_version: 1
   Q156:
     question: What were total refunds in H1, matching each refund to its original
@@ -921,14 +916,14 @@ answers:
     metric: settled_revenue
     expected_behavior: answer_with_disclosure
     expected:
-      2026-06: 2449778.65
+      2026-06: 167724.3
     definition_version: 1
   Q160:
     question: How much did the late batch add to total refunds?
     category: trap
     metric: total_refunds
     expected_behavior: answer_with_disclosure
-    expected: 638939.28
+    expected: 3358.49
     definition_version: 1
   Q161:
     question: What is net realized revenue after the restatement?
@@ -942,7 +937,7 @@ answers:
     category: trap
     metric: total_payments
     expected_behavior: answer_with_disclosure
-    expected: 3000
+    expected: 30
     definition_version: 1
   Q163:
     question: What is H1 settled revenue including late-arriving payments?
@@ -976,12 +971,12 @@ answers:
       Q2: 7383779.56
     definition_version: 1
   Q167:
-    question: How many June payment attempts were recorded after the late batch?
-    category: trap
+    question: Were April payments restated?
+    category: ambiguous
     metric: total_payments
     expected_behavior: answer_with_disclosure
     expected:
-      2026-06: 537
+      2026-04: 540
     definition_version: 1
   Q168:
     question: What is Q2 net realized revenue as restated?
@@ -1267,9 +1262,9 @@ answers:
   Q234:
     question: What should I tell the board about H1 revenue revisions?
     category: ambiguous
-    metric: settled_revenue
-    expected_behavior: answer_with_disclosure
-    expected: 14097425.35
+    metric: null
+    expected_behavior: clarify
+    expected: null
     definition_version: 1
   Q235:
     question: Just give me the number, no caveats.

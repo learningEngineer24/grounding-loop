@@ -25,6 +25,8 @@ sys.path.insert(0, str(ROOT / "phase2"))
 from semantic_compiler import SemanticCatalog  # noqa: E402
 
 DB = ROOT / "warehouse.duckdb"
+DB_JUNE = ROOT / "phase5" / "warehouse_20260630.duckdb"
+DB_JULY = ROOT / "phase5" / "warehouse_20260715.duckdb"
 QUESTIONS = ROOT / "phase3" / "golden_questions.yml"
 OUT = ROOT / "phase3" / "golden_answers.yml"
 
@@ -69,30 +71,34 @@ def fmt(value, metric: str):
     return value
 
 
-def monthly_series(cat: SemanticCatalog, metric: str, dim: str) -> dict[str, float]:
-    rows = cat.run(DB, metric, dimensions=[dim], grain="month")
+def monthly_series(cat: SemanticCatalog, metric: str, dim: str, db=None) -> dict[str, float]:
+    db = db or DB
+    rows = cat.run(db, metric, dimensions=[dim], grain="month")
     out: dict[str, float] = {}
     for ts, val in rows:
         out[month_key(ts)] = float(val or 0)
     return out
 
 
-def dim_breakdown(cat: SemanticCatalog, metric: str, dim: str) -> dict:
-    rows = cat.run(DB, metric, dimensions=[dim])
+def dim_breakdown(cat: SemanticCatalog, metric: str, dim: str, db=None) -> dict:
+    db = db or DB
+    rows = cat.run(db, metric, dimensions=[dim])
     return {str(k): fmt(v, metric) for k, v in rows}
 
 
-def scalar(cat: SemanticCatalog, metric: str):
-    return fmt(cat.run(DB, metric)[0][0], metric)
+def scalar(cat: SemanticCatalog, metric: str, db=None):
+    db = db or DB
+    return fmt(cat.run(db, metric)[0][0], metric)
 
 
-def derived_by_period(cat: SemanticCatalog, metric: str, period: str):
+def derived_by_period(cat: SemanticCatalog, metric: str, period: str, db=None):
+    db = db or DB
     """Combine compiled components for derived metrics over a period."""
     months = period_months(period)
     spec = cat.metrics[metric]
     if metric == "net_realized_revenue":
-        rev = monthly_series(cat, "settled_revenue", "payment_date")
-        ref = monthly_series(cat, "total_refunds", "refund_date")
+        rev = monthly_series(cat, "settled_revenue", "payment_date", db)
+        ref = monthly_series(cat, "total_refunds", "refund_date", db)
         if period in ("Q1", "Q2"):
             r = sum(rev.get(m, 0) for m in months)
             f = sum(ref.get(m, 0) for m in months)
@@ -106,8 +112,8 @@ def derived_by_period(cat: SemanticCatalog, metric: str, period: str):
             "Q2": round(sum(rev.get(m, 0) for m in Q2_MONTHS) - sum(ref.get(m, 0) for m in Q2_MONTHS), 2),
         }
     if metric == "avg_order_value":
-        net = monthly_series(cat, "net_order_value", "order_date")
-        cnt = monthly_series(cat, "total_orders", "order_date")
+        net = monthly_series(cat, "net_order_value", "order_date", db)
+        cnt = monthly_series(cat, "total_orders", "order_date", db)
         n = sum(net.get(m, 0) for m in months)
         c = sum(cnt.get(m, 0) for m in months)
         label = period if period in ("Q1", "Q2") else months[0]
@@ -115,11 +121,22 @@ def derived_by_period(cat: SemanticCatalog, metric: str, period: str):
     raise ValueError(f"no period logic for derived metric {metric}")
 
 
-def answer_question(cat: SemanticCatalog, q: dict):
+def answer_question(cat: SemanticCatalog, q: dict, db=None):
+    # db=None reads the module-level DB constant dynamically so callers
+    # (e.g. detect_drift) can repoint ca.DB per snapshot.
+    if db is None:
+        db = DB
+    if q.get("delta"):
+        # Restatement delta: this snapshot's value minus the June snapshot's.
+        # On the June snapshot itself the delta is 0 (no restatement yet).
+        plain = {k: v for k, v in q.items() if k != "delta"}
+        now = answer_question(cat, plain, db=db)
+        before = answer_question(cat, plain, db=DB_JUNE)
+        return _delta(now, before, q.get("metric"))
     metric = q.get("metric")
     if metric is None:
         if q.get("metrics"):  # Q111: report both governed neighbors
-            return {m: scalar(cat, m) for m in q["metrics"]}
+            return {m: scalar(cat, m, db) for m in q["metrics"]}
         return None  # clarify / refuse — no computable expected value
     dims = q.get("dimensions")
     grain = q.get("grain")
@@ -127,11 +144,11 @@ def answer_question(cat: SemanticCatalog, q: dict):
     is_derived = cat.metrics[metric].get("type") == "derived"
 
     if is_derived and (grain or period):
-        return derived_by_period(cat, metric, period or "H1")
+        return derived_by_period(cat, metric, period or "H1", db)
     if is_derived:
-        return scalar(cat, metric)
+        return scalar(cat, metric, db)
     if dims and grain == "month":
-        series = monthly_series(cat, metric, dims[0])
+        series = monthly_series(cat, metric, dims[0], db)
         months = period_months(period) if period else H1_MONTHS
         if period and len(months) == 1:
             return {months[0]: fmt(series.get(months[0], 0), metric)}
@@ -139,8 +156,16 @@ def answer_question(cat: SemanticCatalog, q: dict):
             return {period: fmt(sum(series.get(m, 0) for m in months), metric)}
         return {m: fmt(series.get(m, 0), metric) for m in months}
     if dims:
-        return dim_breakdown(cat, metric, dims[0])
-    return scalar(cat, metric)
+        return dim_breakdown(cat, metric, dims[0], db)
+    return scalar(cat, metric, db)
+
+
+def _delta(after, before, metric: str):
+    """Subtract two golden values (dicts or scalars) for restatement deltas."""
+    if isinstance(after, dict) and isinstance(before, dict):
+        keys = [k for k in after if k in before]
+        return {k: fmt(after[k] - before[k], metric) for k in keys}
+    return fmt(after - before, metric)
 
 
 def main():
