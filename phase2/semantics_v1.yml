@@ -173,3 +173,8 @@ metrics:
     type: derived
     depends_on: [cancelled_customers, total_customers]
     expr: "cancelled_customers / total_customers"
+  # --- meta ---
+  - name: period_status
+    description: "Whether a governed metric's value for a period (YYYY-MM) is preliminary (inside its completeness window) or final, and whether it was restated. Virtual metric: query via the get_period_status tool, not query_metric."
+    type: virtual
+    served_by: get_period_status
