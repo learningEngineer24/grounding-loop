@@ -193,6 +193,30 @@ The metric's canonical time dimension, like the fan-out guard, belongs to
 the platform to enforce — not to the agent to remember. That enforcement
 is the honest next build; turn 4 proves the need.
 
+## Loop turn 5: enforcing the canonical meaning
+
+Turn 4 ended with an honest next build: if the agent won't act on the
+definition, the platform should enforce it. Turn 5 built it. The compiler
+now refuses a query that breaks a metric's canonical time attribution —
+asking `total_refunds` for `refund_date` under v3 gets "refused: dimension
+'refund_date' is superseded... Re-query with 'payment_date'" — mirroring
+the fan-out guard's philosophy: refuse rather than silently answer the
+wrong question. v1/v2 semantics are untouched; the refusal surfaces as a
+recoverable error, not a crash.
+
+Re-running the focused set: 7 of 10 agents hit the refusal, 6 re-queried
+with `payment_date`, and 5 returned exactly the v3 numbers (June refunds
+$72,264.45, with the attribution explained in their own words). One agent
+(Q007) did something arguably better than answering: it asked the user
+which meaning they wanted, citing the v3 change. The two misses are
+questions the meaning change doesn't touch.
+
+The turn-4/turn-5 pair is the project's thesis in miniature. Turn 4 proved
+telling the agent isn't enough (0/8 adopted the new meaning). Turn 5 proved
+the platform can guarantee it anyway (5/8 exact, 1 thoughtful clarify).
+Governance, like the fan-out guard before it, turns out to be a platform
+property — not an agent capability to be prompted into existence.
+
 ## Closing the loop
 
 The project is called the Grounding Loop, and until now the loop was a
