@@ -497,6 +497,6 @@
     "behavior_ok": true,
     "numeric_ok": true,
     "metric_ok": true,
-    "disclosure_ok": null
+    "disclosure_ok": true
   }
 ]

@@ -224,4 +224,95 @@ def query_metric(metric: str, dimensions: list[str] | None = None,
     warning = _freshness_warning(metric)
     if warning:
         result["freshness_warning"] = warning
+    note = _restatement_note(metric, result)
+    if note:
+        result["restatement_note"] = note
     return result
+
+
+def _restatement_note(metric_name: str, result: dict) -> str | None:
+    """Inline restatement note for query_metric responses (Phase 5).
+
+    Fires only when the restatement has actually happened as of DATA_AS_OF —
+    on the June-30 snapshot the late batch hasn't landed yet, so there is
+    nothing to disclose — and only when the query actually touches the
+    restated period (or the period is ambiguous, e.g. scalar queries).
+    The note names the period so the agent can judge relevance.
+    """
+    if not DATA_AS_OF:
+        return None
+    rn = restatements().get(metric_name)
+    if not rn:
+        return None
+    try:
+        from datetime import date
+        if date.fromisoformat(DATA_AS_OF) < date.fromisoformat(rn["restated_on"]):
+            return None
+    except Exception:
+        return None
+    period = rn["period"]
+    if not _touches_period(result, period):
+        return None
+    return (f"Restatement: {period} {metric_name} was restated on "
+            f"{rn['restated_on']} ({rn['reason']}). Values shown are post-restatement.")
+
+
+def _touches_period(result: dict, period: str) -> bool:
+    """Does a query_metric result touch YYYY-MM? Scalar/ambiguous -> True."""
+    cols = result.get("columns", []) or []
+    rows = result.get("rows", []) or []
+    if not rows:
+        return True
+    time_col = next((i for i, c in enumerate(cols)
+                     if c in ("payment_date", "refund_date", "order_date",
+                              "signup_date")), None)
+    if time_col is None:
+        return True  # scalar or non-time cut: period ambiguous
+    for r in rows:
+        v = r[time_col]
+        key = v.strftime("%Y-%m") if hasattr(v, "strftime") else str(v)[:7]
+        if key == period:
+            return True
+        # quarter aggregates ("Q1"/"Q2"): does the restated month fall in it?
+        q_months = {"Q1": ("01", "02", "03"), "Q2": ("04", "05", "06"),
+                    "Q3": ("07", "08", "09"), "Q4": ("10", "11", "12")}
+        if key in q_months and period[5:7] in q_months[key]:
+            return True
+    return False
+
+
+def get_period_status(metric_name: str, period: str) -> dict:
+    """Governed period status: is a metric's value for a period preliminary
+    or final, and was it restated? Backs the period_status virtual metric.
+    period is YYYY-MM.
+    """
+    cat = catalog()
+    m = cat.metrics.get(metric_name, {})
+    try:
+        from datetime import date, timedelta
+        asof = date.fromisoformat(DATA_AS_OF) if DATA_AS_OF else date.today()
+        month_end = date(int(period[:4]), int(period[5:7]), 1) + timedelta(days=32)
+        month_end = month_end.replace(day=1) - timedelta(days=1)
+        f = m.get("freshness")
+        if f:
+            final_on = month_end + timedelta(days=int(f["lag_days"]))
+            status = "final" if asof >= final_on else "preliminary"
+            detail = (f"final {final_on.isoformat()} "
+                      f"({f['lag_days']}-day completeness window)")
+        else:
+            status, detail = "final", "no completeness window on this metric"
+    except Exception:
+        return {"error": f"bad period '{period}'; use YYYY-MM."}
+    rn = restatements().get(metric_name) or {}
+    restated = rn.get("period") == period
+    try:
+        from datetime import date as _d
+        if restated and DATA_AS_OF and _d.fromisoformat(DATA_AS_OF) < _d.fromisoformat(rn["restated_on"]):
+            restated = False
+    except Exception:
+        pass
+    out = {"metric": metric_name, "period": period, "status": status,
+           "restated": restated, "detail": detail}
+    if restated:
+        out["restatement"] = {"restated_on": rn["restated_on"], "reason": rn["reason"]}
+    return out

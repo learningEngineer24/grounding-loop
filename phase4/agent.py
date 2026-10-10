@@ -49,9 +49,13 @@ answer — that's a disclosure, not a clarification.
 9. If freshness metadata flags a restated period, call list_restatements \
 for the metric and mention the restatement (period, reason, direction) in \
 one sentence alongside the answer.
+10. query_metric responses may carry an inline restatement_note — if the \
+period you are answering about was restated, mention it in one sentence. \
+To check whether a metric's value for a period is preliminary or final, \
+call get_period_status (backing the period_status virtual metric).
 
 Work step by step. You may call list_metrics, describe_metric, \
-list_restatements, and query_metric as many times as you need, then finish \
+list_restatements, get_period_status, and query_metric as many times as you need, then finish \
 with exactly one of submit_answer, ask_clarify, refuse."""
 
 TOOL_DEFS = [
@@ -75,6 +79,12 @@ TOOL_DEFS = [
      "description": "Restatement log: every recorded restatement of a governed metric (metric, period, restated_on, reason, old vs new value). Check this when freshness metadata flags a restated period.",
      "input_schema": {"type": "object",
                       "properties": {"metric": {"type": "string"}}}},
+    {"name": "get_period_status",
+     "description": "Is a governed metric's value for a period (YYYY-MM) preliminary or final, and was it restated? Backs the period_status virtual metric.",
+     "input_schema": {"type": "object",
+                      "properties": {"metric": {"type": "string"},
+                                      "period": {"type": "string"}},
+                      "required": ["metric", "period"]}},
     {"name": "submit_answer",
      "description": "Terminal. Submit your final answer: the number(s), the governed metric used, and any one-sentence disclosure.",
      "input_schema": {"type": "object",
@@ -153,6 +163,8 @@ def _dispatch(name: str, args: dict):
                                   args.get("dimensions"), args.get("grain"))
     if name == "list_restatements":
         return tools.list_restatements(args.get("metric"))
+    if name == "get_period_status":
+        return tools.get_period_status(args.get("metric"), args.get("period"))
     if name in TERMINAL:
         return {"ok": True}
     return {"error": f"unknown tool {name}"}

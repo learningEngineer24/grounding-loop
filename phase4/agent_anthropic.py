@@ -65,6 +65,8 @@ def run_question(model: str, qid: str, question: str) -> dict:
     tool_calls: list[dict] = []
     terminal: dict | None = None
     usage = {"input_tokens": 0, "output_tokens": 0}
+    seen_restatements: list[str] = []  # restatement notes to attach deterministically
+    seen_metrics: set[str] = set()  # every governed metric referenced in any tool call
 
     for _ in range(MAX_TURNS):
         resp = _post(model, messages)
@@ -88,6 +90,13 @@ def run_question(model: str, qid: str, question: str) -> dict:
                         and "rows" in result:
                     entry["rows"] = result["rows"][:200]
                     entry["columns"] = result.get("columns", [])
+                    note = result.get("restatement_note")
+                    if note and note not in seen_restatements:
+                        seen_restatements.append(note)
+                for key in ("metric", "name"):
+                    val = (block.get("input", {}) or {}).get(key)
+                    if isinstance(val, str):
+                        seen_metrics.add(val)
                 tool_calls.append(entry)
                 pending_results.append({
                     "type": "tool_result", "tool_use_id": block["id"],
@@ -95,10 +104,40 @@ def run_question(model: str, qid: str, question: str) -> dict:
                 if block["name"] in TERMINAL:
                     terminal = {"action": block["name"],
                                 **(block.get("input", {}) or {})}
+                    if block["name"] == "submit_answer":
+                        # Deterministic answer-level disclosure (serving layer):
+                        # known-known restatements are attached by the platform,
+                        # not left to agent discretion. Fires when the trace
+                        # referenced a restated metric in ANY tool (query,
+                        # describe, restatement log, period status) — the answer
+                        # concerns restated data even if the agent never
+                        # re-queried it.
+                        for m in sorted(seen_metrics):
+                            rn = (tools.restatements() or {}).get(m)
+                            if rn and tools.data_as_of() >= rn["restated_on"]:
+                                n = (f"Restatement: {rn['period']} {m} was restated "
+                                     f"on {rn['restated_on']} ({rn['reason']}).")
+                                if n not in seen_restatements:
+                                    seen_restatements.append(n)
+                    if block["name"] == "submit_answer" and seen_restatements:
+                        raw = terminal.get("answer_text", "")
+                        caveat = (" [Governance note: "
+                                  + " ".join(seen_restatements) + "]")
+                        terminal["answer_text_raw"] = raw
+                        terminal["answer_text"] = raw + caveat
+                        terminal["system_caveat_appended"] = True
         messages.append({"role": "assistant", "content": assistant_blocks})
         if terminal:
             break
-        messages.append({"role": "user", "content": pending_results})
+        if pending_results:
+            messages.append({"role": "user", "content": pending_results})
+        else:
+            # Text-only turn: nudge back to the tools instead of crashing
+            # on an empty user message (Anthropic 400).
+            messages.append({"role": "user",
+                             "content": "Continue: use one of the available tools "
+                                        "(query_metric, get_period_status, list_restatements, "
+                                        "describe_metric) or a terminal action."})
 
     return {"id": qid, "question": question, "tool_calls": tool_calls,
             "terminal": terminal or {"action": "no_decision"},
