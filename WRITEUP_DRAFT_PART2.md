@@ -158,6 +158,41 @@ The three turns now read as one argument: teach the agent (34% -> 52%),
 don't distract it (no behavior cost), and guarantee what matters
 deterministically (52% -> 62% on the full set).
 
+## Loop turn 4: when the meaning drifts
+
+Every drift so far moved data. Turn 4 moved a meaning instead: finance
+redefined `total_refunds` from refund-event-month attribution to
+original-payment-month attribution (semantics v3). Not a single row changed;
+June refunds are still June refunds — but "June refunds" now means $72,264
+instead of $200,977.
+
+**Detect:** the canary caught it anyway. Recomputing the golden set under v3
+semantics changed 8 answers — every monthly refund breakdown — while H1
+totals correctly stayed put. The canary doesn't care whether drift is data
+or meaning; it watches answers.
+
+**Diagnose:** the agent was completely blind to it. On the 8 changed
+questions it queried `refund_date` every time — 0/8 used the new
+attribution — even though 8 of 10 traces called `describe_metric` and were
+shown the v3 definition stating the change outright. It looked and didn't
+act. None of the existing machinery could fire: freshness contracts watch
+data arrival, the restatement log watches data revisions, and the turn-3
+deterministic layer watches restated periods. Meaning drift is invisible to
+all three by construction.
+
+**Feed back:** a `definition_changes.json` log (the meaning-drift parallel
+to `restatements.json`), a `list_definition_changes` tool, the change
+surfaced in `describe_metric` metadata, and the deterministic layer extended:
+any answer touching a redefined metric now carries the definition-change
+note. Re-running the 10-question focused set: the agent still didn't adopt
+the new attribution (0/10), but 8/10 answers now reach the user with the
+governance note attached.
+
+The turn's lesson rhymes with turn 3's: telling the agent isn't enough.
+The metric's canonical time dimension, like the fan-out guard, belongs to
+the platform to enforce — not to the agent to remember. That enforcement
+is the honest next build; turn 4 proves the need.
+
 ## Closing the loop
 
 The project is called the Grounding Loop, and until now the loop was a
