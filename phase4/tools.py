@@ -16,15 +16,19 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "phase2"))
 from semantic_compiler import SemanticCatalog  # noqa: E402
 
 BASE = Path(__file__).resolve().parent
-CATALOG_PATH = BASE.parent / "phase2" / "semantics_v1.yml"
+CATALOG_PATH = Path(os.environ.get("GROUNDING_SEMANTICS",
+                                   BASE.parent / "phase2" / "semantics_v1.yml"))
 # Phase 5 drift runs point this at a snapshot DB instead.
 DB_PATH = Path(os.environ.get("GROUNDING_DB", BASE.parent / "warehouse.duckdb"))
 # When set (Phase 5), describe_metric exposes freshness/restatement metadata.
 DATA_AS_OF = os.environ.get("GROUNDING_DATA_AS_OF")
 RESTATEMENTS_PATH = os.environ.get("GROUNDING_RESTATEMENTS")
+DEFCHANGES_PATH = os.environ.get("GROUNDING_DEFCHANGES",
+                                 str(BASE.parent / "phase5" / "definition_changes.json"))
 
 _catalog: SemanticCatalog | None = None
 _restatements: dict | None = None
+_defchanges: dict | None = None
 
 
 def restatements() -> dict:
@@ -39,22 +43,16 @@ def restatements() -> dict:
     return _restatements
 
 
-def _freshness(name: str) -> dict:
-    """Freshness/restatement metadata for one metric (Phase 5 only)."""
-    if not DATA_AS_OF:
-        return {}
-    out = {"data_as_of": DATA_AS_OF}
-    r = restatements().get(name)
-    if r:
-        out["restatement"] = (
-            f"{r['period']} restated on {r['restated_on']}: {r['reason']}. "
-            f"Figures reported before {r['restated_on']} for {r['period']} "
-            f"are stale."
-        )
-    m = catalog().metrics.get(name, {})
-    if m.get("freshness"):
-        out["freshness_contract"] = m["freshness"]
-    return out
+def definition_changes() -> dict:
+    """Metric -> meaning-change metadata (turn 4; empty when file absent)."""
+    global _defchanges
+    if _defchanges is None:
+        _defchanges = {}
+        if DEFCHANGES_PATH and Path(DEFCHANGES_PATH).exists():
+            import json
+
+            _defchanges = json.loads(Path(DEFCHANGES_PATH).read_text())
+    return _defchanges
 
 
 def list_restatements(metric: str | None = None) -> list[dict]:
@@ -85,6 +83,26 @@ def list_restatements(metric: str | None = None) -> list[dict]:
         "old_value": float(r[4]), "new_value": float(r[5]),
         "delta": round(float(r[5]) - float(r[4]), 2),
     } for r in rows]
+
+
+def list_definition_changes(metric: str | None = None) -> list[dict]:
+    """Definition-change log: recorded meaning changes to governed metrics.
+
+    Each row names the metric, which semantics version changed it, when,
+    what the previous meaning was, what it is now, and why. This is MEANING
+    drift (the definition moved), not data drift (the numbers moved).
+    Empty list when nothing changed.
+    """
+    dc = definition_changes()
+    out = []
+    for m, r in dc.items():
+        if metric and m != metric:
+            continue
+        out.append({"metric": m, **r})
+    return out
+
+
+def _freshness(name: str) -> dict:
     """Freshness/restatement metadata for one metric (Phase 5 only)."""
     if not DATA_AS_OF:
         return {}
@@ -99,6 +117,12 @@ def list_restatements(metric: str | None = None) -> list[dict]:
     m = catalog().metrics.get(name, {})
     if m.get("freshness"):
         out["freshness_contract"] = m["freshness"]
+    dc = definition_changes().get(name)
+    if dc:
+        out["definition_change"] = (
+            f"Redefined in v{dc['changed_in_version']} ({dc['changed_on']}): "
+            f"{dc['previous']} Now: {dc['current']} Reason: {dc['reason']}"
+        )
     return out
 
 

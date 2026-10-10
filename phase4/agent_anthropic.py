@@ -100,17 +100,34 @@ def run_question(model: str, qid: str, question: str) -> dict:
                     terminal = {"action": block["name"],
                                 **(block.get("input", {}) or {})}
                     # Deterministic answer-level disclosure (serving layer):
-                    # if any query in this trace touched a restated period,
-                    # attach the governance note to the answer. Known-knowns
-                    # are attached by the platform, not left to agent
-                    # discretion.
-                    if block["name"] == "submit_answer" and seen_restatements:
-                        raw = terminal.get("answer_text", "")
-                        caveat = (" [Governance note: "
-                                  + " ".join(seen_restatements) + "]")
-                        terminal["answer_text_raw"] = raw
-                        terminal["answer_text"] = raw + caveat
-                        terminal["system_caveat_appended"] = True
+                    # known-knowns are attached by the platform, not left to
+                    # agent discretion. Fires when (a) any query touched a
+                    # restated period, or (b) the trace touched a metric whose
+                    # definition changed (turn 4: meaning drift).
+                    if block["name"] == "submit_answer":
+                        notes = list(seen_restatements)
+                        seen_metrics = set()
+                        for c in tool_calls:
+                            inp = c.get("input") or {}
+                            for k in ("metric", "name"):
+                                if isinstance(inp.get(k), str):
+                                    seen_metrics.add(inp[k])
+                        for m in sorted(seen_metrics):
+                            dc = (tools.definition_changes() or {}).get(m)
+                            if dc:
+                                n = (f"Definition change: {m} redefined in "
+                                     f"v{dc['changed_in_version']} "
+                                     f"({dc['changed_on']}): {dc['previous']} "
+                                     f"Now: {dc['current']}")
+                                if n not in notes:
+                                    notes.append(n)
+                        if notes:
+                            raw = terminal.get("answer_text", "")
+                            caveat = (" [Governance note: "
+                                      + " ".join(notes) + "]")
+                            terminal["answer_text_raw"] = raw
+                            terminal["answer_text"] = raw + caveat
+                            terminal["system_caveat_appended"] = True
         messages.append({"role": "assistant", "content": assistant_blocks})
         if terminal:
             break

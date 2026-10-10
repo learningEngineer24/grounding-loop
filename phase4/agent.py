@@ -79,6 +79,10 @@ TOOL_DEFS = [
      "description": "Restatement log: every recorded restatement of a governed metric (metric, period, restated_on, reason, old vs new value). Check this when freshness metadata flags a restated period.",
      "input_schema": {"type": "object",
                       "properties": {"metric": {"type": "string"}}}},
+    {"name": "list_definition_changes",
+     "description": "Definition-change log: recorded MEANING changes to governed metrics (metric, version, previous vs current meaning, reason). Meaning drift, not data drift. Check when a metric's definition metadata flags a redefinition.",
+     "input_schema": {"type": "object",
+                      "properties": {"metric": {"type": "string"}}}},
     {"name": "get_period_status",
      "description": "Is a governed metric's value for a period (YYYY-MM) preliminary or final, and was it restated? Backs the period_status virtual metric.",
      "input_schema": {"type": "object",
@@ -163,6 +167,8 @@ def _dispatch(name: str, args: dict):
                                   args.get("dimensions"), args.get("grain"))
     if name == "list_restatements":
         return tools.list_restatements(args.get("metric"))
+    if name == "list_definition_changes":
+        return tools.list_definition_changes(args.get("metric"))
     if name == "get_period_status":
         return tools.get_period_status(args.get("metric"), args.get("period"))
     if name in TERMINAL:
