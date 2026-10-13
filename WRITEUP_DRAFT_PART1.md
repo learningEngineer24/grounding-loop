@@ -3,7 +3,7 @@
 **Status:** Draft for review, October 9, 2026
 **Intended:** Projects page post (companion to the Agent Era essay)
 **Repo:** https://github.com/learningEngineer24/grounding-loop
-**Sequel:** [Managing Drift](WRITEUP_DRAFT_PART2.md): the operations story, what happens when the data moves.
+**Series:** [Managing Drift](WRITEUP_DRAFT_PART2.md) (keeping it honest as the world moves) · [What It Means for Your Organization](WRITEUP_DRAFT_PART3.md) (what the loop demands of the organization)
 
 > A working build of the feedback loop from "Data Engineering in the Agent
 > Era": a governed semantic layer over a synthetic warehouse, a golden

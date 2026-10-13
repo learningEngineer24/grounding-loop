@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 520 560" role="img" aria-label="The feedback loop: define, serve, evaluate, detect drift, feed back, with the versioned fix returning to define">
+          <defs>
+            <marker id="arr-loop" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#555"></path>
+            </marker>
+          </defs>
+          <g font-family="'Liberation Sans', sans-serif">
+            <rect x="90" y="12" width="340" height="80" rx="4" fill="#f7f7f5" stroke="#555" stroke-width="1.5"/>
+            <text x="108" y="38" font-size="11" letter-spacing="1.5" fill="#777">STEP 1</text>
+            <text x="108" y="60" font-size="13" font-weight="700" fill="#1a1a1a">DEFINE</text>
+            <text x="108" y="80" font-size="11" fill="#333">Approved definition: SQL, filters, grain rules</text>
+            <line x1="260" y1="96" x2="260" y2="116" stroke="#555" stroke-width="1.5" marker-end="url(#arr-loop)"/>
+            <rect x="90" y="122" width="340" height="80" rx="4" fill="#f7f7f5" stroke="#555" stroke-width="1.5"/>
+            <text x="108" y="148" font-size="11" letter-spacing="1.5" fill="#777">STEP 2</text>
+            <text x="108" y="170" font-size="13" font-weight="700" fill="#1a1a1a">SERVE</text>
+            <text x="108" y="190" font-size="11" fill="#333">Agents answer questions using those definitions</text>
+            <line x1="260" y1="206" x2="260" y2="226" stroke="#555" stroke-width="1.5" marker-end="url(#arr-loop)"/>
+            <rect x="90" y="232" width="340" height="80" rx="4" fill="#f7f7f5" stroke="#555" stroke-width="1.5"/>
+            <text x="108" y="258" font-size="11" letter-spacing="1.5" fill="#777">STEP 3</text>
+            <text x="108" y="280" font-size="13" font-weight="700" fill="#1a1a1a">EVALUATE</text>
+            <text x="108" y="300" font-size="11" fill="#333">Golden questions run on every change</text>
+            <line x1="260" y1="316" x2="260" y2="336" stroke="#555" stroke-width="1.5" marker-end="url(#arr-loop)"/>
+            <rect x="90" y="342" width="340" height="80" rx="4" fill="#f7f7f5" stroke="#555" stroke-width="1.5"/>
+            <text x="108" y="368" font-size="11" letter-spacing="1.5" fill="#777">STEP 4</text>
+            <text x="108" y="390" font-size="13" font-weight="700" fill="#1a1a1a">DETECT DRIFT</text>
+            <text x="108" y="410" font-size="11" fill="#333">Classify failures: agent, semantic, or data</text>
+            <line x1="260" y1="426" x2="260" y2="446" stroke="#555" stroke-width="1.5" marker-end="url(#arr-loop)"/>
+            <rect x="90" y="452" width="340" height="80" rx="4" fill="#f7f7f5" stroke="#555" stroke-width="1.5"/>
+            <text x="108" y="478" font-size="11" letter-spacing="1.5" fill="#777">STEP 5</text>
+            <text x="108" y="500" font-size="13" font-weight="700" fill="#1a1a1a">FEED BACK</text>
+            <text x="108" y="520" font-size="11" fill="#333">Route to the owner; version the fix into the layer</text>
+            <path d="M 90 492 L 40 492 L 40 52 L 84 52" fill="none" stroke="#777" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arr-loop)"/>
+          </g>
+        </svg>

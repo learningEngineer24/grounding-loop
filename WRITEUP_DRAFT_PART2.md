@@ -3,7 +3,7 @@
 **Status:** Draft for review, October 10, 2026
 **Intended:** Projects page post (sequel to The Grounding Loop)
 **Repo:** https://github.com/learningEngineer24/grounding-loop
-**Prequel:** [The Grounding Loop](WRITEUP_DRAFT_PART1.md): the measurement story.
+**Series:** [The Grounding Loop](WRITEUP_DRAFT_PART1.md) (does it work) · [What It Means for Your Organization](WRITEUP_DRAFT_PART3.md) (what the loop demands of the organization)
 
 > Part 1 built the apparatus: a governed semantic layer over a synthetic
 > warehouse, a golden set of trap questions, and a harness that scores
