@@ -3,7 +3,7 @@
 **Status:** Draft for review, October 12, 2026
 **Intended:** Writing tab post (leads the Grounding Loop series)
 **Repo:** https://github.com/learningEngineer24/grounding-loop
-**Series:** [The Grounding Loop](WRITEUP_DRAFT_PART1.md) (does it work) · [Grounding the Loop: Managing Drift](WRITEUP_DRAFT_PART2.md) (keeping it honest as the world moves)
+**Series:** [The Grounding Loop](WRITEUP_DRAFT_PART1.md) (does it work) · [The Grounding Loop: Managing Drift](WRITEUP_DRAFT_PART2.md) (keeping it honest as the world moves)
 
 ## TL;DR
 

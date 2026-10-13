@@ -1,4 +1,4 @@
-# Grounding the Loop: Managing Drift
+# The Grounding Loop: Managing Drift
 
 **Status:** Draft for review, October 10, 2026
 **Intended:** Projects page post (sequel to The Grounding Loop)
