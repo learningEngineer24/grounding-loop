@@ -2,7 +2,7 @@
 Run the agent over all 50 golden questions; write one JSONL trace per run.
 
 Usage:
-  .venv/bin/python run_harness.py [--backend anthropic|gemini|openai|ember|openrouter|ollama|baseline] [--model ...] [--limit N] [--out traces.jsonl]
+  .venv/bin/python run_harness.py [--backend anthropic|gemini|openai|ember|openrouter|ollama|atem|baseline] [--model ...] [--limit N] [--out traces.jsonl]
 
 The agent only ever sees the question text — never the golden answers.
 The baseline backend is deterministic and needs no API key.
@@ -28,6 +28,7 @@ DEFAULT_MODELS = {"anthropic": "claude-haiku-4-5-20251001",
                 "ember": "muse-ember-1.0",
                 "openrouter": "meta/muse-ember",
                 "ollama": "hf.co/meta-models/Muse-Glimmer-30B-GGUF:Muse-Glimmer-30B-KQuant-17GB-Q4_K_M",
+                "atem": "hf.co/meta-models/Muse-Glimmer-30B-GGUF:Muse-Glimmer-30B-KQuant-17GB-Q4_K_M",
                 "baseline": "deterministic-v1"}
 
 
@@ -35,7 +36,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--backend", choices=["anthropic", "anthropic_conn",
                                             "gemini", "openai", "ember",
-                                            "openrouter", "ollama",
+                                            "openrouter", "ollama", "atem",
                                             "baseline"],
                     default="anthropic")
     ap.add_argument("--model", default=None)
@@ -89,6 +90,13 @@ def main() -> None:
 
         def run_one(_client, model, qid, question):
             return agent_ollama.run_question(model, qid, question)
+
+        client = None
+    elif args.backend == "atem":
+        import agent_atem
+
+        def run_one(_client, model, qid, question):
+            return agent_atem.run_question(model, qid, question)
 
         client = None
     elif args.backend == "anthropic_conn":
