@@ -25,6 +25,8 @@ import score as governed_score  # noqa: E402 — reuse behavior/numeric/disclosu
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--traces", default="traces_nolayer.jsonl")
+    ap.add_argument("--scores-out", default="scores_4b.json",
+                    help="where to write the scored results (default: scores_4b.json)")
     args = ap.parse_args()
 
     questions = {q["id"]: q for q in yaml.safe_load(
@@ -69,8 +71,8 @@ def main() -> None:
                   f"(terminal={s['terminal']})")
             print(f"    -> {txt[:160]}")
 
-    (BASE / "scores_4b.json").write_text(json.dumps(scored, indent=2))
-    print("\nwrote phase4b/scores_4b.json")
+    (BASE / args.scores_out).write_text(json.dumps(scored, indent=2))
+    print(f"\nwrote phase4b/{args.scores_out}")
 
 
 if __name__ == "__main__":
