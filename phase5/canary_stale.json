@@ -1,0 +1,162 @@
+{
+  "checked_at": "2026-10-09T19:47:52.039846+00:00",
+  "db": "phase5/warehouse_20260630.duckdb",
+  "questions_checked": 50,
+  "verdict": "STALE",
+  "stale_count": 15,
+  "stale": [
+    {
+      "id": "Q001",
+      "golden": 14097425.35,
+      "live": 13929701.05,
+      "delta": -167724.3
+    },
+    {
+      "id": "Q003",
+      "golden": {
+        "Q2": 7383779.56
+      },
+      "live": {
+        "Q2": 7216055.26
+      },
+      "delta": {
+        "Q2": -167724.3
+      }
+    },
+    {
+      "id": "Q004",
+      "golden": 3000.0,
+      "live": 2970.0,
+      "delta": -30.0
+    },
+    {
+      "id": "Q005",
+      "golden": {
+        "chargeback": 48.0,
+        "failed": 157.0,
+        "pending_settlement": 179.0,
+        "refunded": 140.0,
+        "settled": 2422.0,
+        "voided": 54.0
+      },
+      "live": {
+        "chargeback": 47.0,
+        "failed": 155.0,
+        "pending_settlement": 177.0,
+        "refunded": 138.0,
+        "settled": 2399.0,
+        "voided": 54.0
+      },
+      "delta": {
+        "chargeback": -1.0,
+        "failed": -2.0,
+        "pending_settlement": -2.0,
+        "refunded": -2.0,
+        "settled": -23.0,
+        "voided": 0.0
+      }
+    },
+    {
+      "id": "Q006",
+      "golden": 638939.28,
+      "live": 635580.79,
+      "delta": -3358.49
+    },
+    {
+      "id": "Q008",
+      "golden": 13458486.07,
+      "live": 13294120.26,
+      "delta": -164365.81
+    },
+    {
+      "id": "Q009",
+      "golden": {
+        "Q1": 6493212.03,
+        "Q2": 6965274.04
+      },
+      "live": {
+        "Q1": 6493212.03,
+        "Q2": 6800908.23
+      },
+      "delta": {
+        "Q1": 0.0,
+        "Q2": -164365.81
+      }
+    },
+    {
+      "id": "Q025",
+      "golden": {
+        "2026-06": 2449778.65
+      },
+      "live": {
+        "2026-06": 2282054.35
+      },
+      "delta": {
+        "2026-06": -167724.3
+      }
+    },
+    {
+      "id": "Q104",
+      "golden": 638939.28,
+      "live": 635580.79,
+      "delta": -3358.49
+    },
+    {
+      "id": "Q106",
+      "golden": 13458486.07,
+      "live": 13294120.26,
+      "delta": -164365.81
+    },
+    {
+      "id": "Q108",
+      "golden": 14097425.35,
+      "live": 13929701.05,
+      "delta": -167724.3
+    },
+    {
+      "id": "Q110",
+      "golden": {
+        "2026-06": 2449778.65
+      },
+      "live": {
+        "2026-06": 2282054.35
+      },
+      "delta": {
+        "2026-06": -167724.3
+      }
+    },
+    {
+      "id": "Q111",
+      "golden": {
+        "total_payments": 3000.0,
+        "settled_revenue": 14097425.35
+      },
+      "live": {
+        "total_payments": 2970.0,
+        "settled_revenue": 13929701.05
+      },
+      "delta": {
+        "total_payments": -30.0,
+        "settled_revenue": -167724.3
+      }
+    },
+    {
+      "id": "Q112",
+      "golden": {
+        "settled": 14097425.35
+      },
+      "live": {
+        "settled": 13929701.05
+      },
+      "delta": {
+        "settled": -167724.3
+      }
+    },
+    {
+      "id": "Q208",
+      "golden": 14097425.35,
+      "live": 13929701.05,
+      "delta": -167724.3
+    }
+  ]
+}

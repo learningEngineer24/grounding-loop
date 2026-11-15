@@ -1,0 +1,11 @@
+## Phase 5 drift results — 50 questions
+
+behavior accuracy : 39/50 = 78%
+numeric accuracy  : 32/42 = 76% (42 answerable)
+metric selection  : 33/42 = 79%
+disclosure rate   : 1/12 = 8% (12 disclosure-expected)
+revision disclosure: 2/15 = 13% (15 changed answers)
+  missed: Q001, Q003, Q004, Q006, Q008, Q025, Q104, Q106, Q108, Q110, Q111, Q112, Q208
+  straightforward behavior 29/30 = 97%  numeric 28/30 = 93%
+  trap            behavior 6/12 = 50%  numeric 4/11 = 36%
+  ambiguous       behavior 4/8 = 50%  numeric 0/1 = 0%

@@ -59,4 +59,16 @@ the cent; time-grain (`DATE_TRUNC`) and dimensional grouping verified.
   ambiguous questions specify clarify/refuse/answer-with-disclosure behavior.
   `phase3/compute_answers.py` locks the answers; `phase3/validate_golden.py`
   recomputes all 50 and fails on any drift. 50/50 reproduce.
-- **Phase 4 (next):** agent harness — run an LLM against the golden set and score it.
+- **Phase 4 (Oct 9):** agent harness (`phase4/`: tools, agents, runner,
+  4-dimension scorer — behavior / numeric / disclosure / metric selection).
+  Deterministic baseline, no API: behavior 42/50 (84%), numeric 34/42 (81%),
+  metric selection 39/42 (93%), disclosure 1/11 (9%). Gemini backend built on
+  the free tier but the run is blocked: free-tier quota exhausted (429s), plus
+  a harness bug found and fixed during the retry (thoughtSignature lives at
+  the response *part* level, not inside functionCall). Gemini scorecard still
+  open.
+- **Phase 4b (Oct 9):** no-layer ablation (`phase4b/`) — the same model
+  answers the same 50 questions by writing its own SQL (SELECT-only
+  `run_sql`, schema DDL + full `QUIRKS.md` as context) instead of calling
+  governed metrics; isolates the semantic layer's *enforcement* value vs raw
+  SQL. Run pending on the same Gemini quota.
