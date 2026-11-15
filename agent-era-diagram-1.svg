@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 520 330" role="img" aria-label="The three layers: build the data foundation, encode the meaning, evaluate the behavior">
+          <defs>
+            <marker id="arr-layers" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#555"></path>
+            </marker>
+          </defs>
+          <g font-family="'Liberation Sans', sans-serif">
+            <rect x="20" y="8" width="480" height="86" rx="4" fill="#f7f7f5" stroke="#555" stroke-width="1.5"/>
+            <text x="44" y="36" font-size="11" letter-spacing="1.5" fill="#777">LAYER 1</text>
+            <text x="44" y="60" font-size="14" font-weight="700" fill="#1a1a1a">BUILD THE DATA FOUNDATION</text>
+            <text x="44" y="80" font-size="11" fill="#333">Logging, pipelines, data quality, lineage &#8212; the computable foundation.</text>
+            <line x1="260" y1="98" x2="260" y2="112" stroke="#555" stroke-width="1.5" marker-end="url(#arr-layers)"/>
+            <rect x="20" y="118" width="480" height="86" rx="4" fill="#f7f7f5" stroke="#555" stroke-width="1.5"/>
+            <text x="44" y="146" font-size="11" letter-spacing="1.5" fill="#777">LAYER 2</text>
+            <text x="44" y="170" font-size="14" font-weight="700" fill="#1a1a1a">ENCODE THE MEANING</text>
+            <text x="44" y="190" font-size="11" fill="#333">Approved definitions and metric logic, versioned as artifacts.</text>
+            <line x1="260" y1="208" x2="260" y2="222" stroke="#555" stroke-width="1.5" marker-end="url(#arr-layers)"/>
+            <rect x="20" y="228" width="480" height="86" rx="4" fill="#f7f7f5" stroke="#555" stroke-width="1.5"/>
+            <text x="44" y="256" font-size="11" letter-spacing="1.5" fill="#777">LAYER 3</text>
+            <text x="44" y="280" font-size="14" font-weight="700" fill="#1a1a1a">EVALUATE THE BEHAVIOR</text>
+            <text x="44" y="300" font-size="11" fill="#333">Golden datasets, judges, and regression runs keep the layer honest.</text>
+          </g>
+        </svg>

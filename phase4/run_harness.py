@@ -2,7 +2,7 @@
 Run the agent over all 50 golden questions; write one JSONL trace per run.
 
 Usage:
-  .venv/bin/python run_harness.py [--backend anthropic|gemini|baseline] [--model ...] [--limit N] [--out traces.jsonl]
+  .venv/bin/python run_harness.py [--backend anthropic|gemini|openai|ember|openrouter|ollama|baseline] [--model ...] [--limit N] [--out traces.jsonl]
 
 The agent only ever sees the question text — never the golden answers.
 The baseline backend is deterministic and needs no API key.
@@ -24,13 +24,19 @@ BASE = Path(__file__).resolve().parent
 DEFAULT_MODELS = {"anthropic": "claude-haiku-4-5-20251001",
                 "anthropic_conn": "claude-haiku-4-5-20251001",
                 "gemini": "gemini-3.8-flash",
+                "openai": "gpt-6.1-sol",
+                "ember": "muse-ember-1.0",
+                "openrouter": "meta/muse-ember",
+                "ollama": "hf.co/meta-models/Muse-Glimmer-30B-GGUF:Muse-Glimmer-30B-KQuant-17GB-Q4_K_M",
                 "baseline": "deterministic-v1"}
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--backend", choices=["anthropic", "anthropic_conn",
-                                            "gemini", "baseline"],
+                                            "gemini", "openai", "ember",
+                                            "openrouter", "ollama",
+                                            "baseline"],
                     default="anthropic")
     ap.add_argument("--model", default=None)
     ap.add_argument("--limit", type=int, default=0)
@@ -55,6 +61,34 @@ def main() -> None:
 
         def run_one(_client, model, qid, question):
             return agent_gemini.run_question(model, qid, question)
+
+        client = None
+    elif args.backend == "openai":
+        import agent_openai
+
+        def run_one(_client, model, qid, question):
+            return agent_openai.run_question(model, qid, question)
+
+        client = None
+    elif args.backend == "ember":
+        import agent_ember
+
+        def run_one(_client, model, qid, question):
+            return agent_ember.run_question(model, qid, question)
+
+        client = None
+    elif args.backend == "openrouter":
+        import agent_openrouter
+
+        def run_one(_client, model, qid, question):
+            return agent_openrouter.run_question(model, qid, question)
+
+        client = None
+    elif args.backend == "ollama":
+        import agent_ollama
+
+        def run_one(_client, model, qid, question):
+            return agent_ollama.run_question(model, qid, question)
 
         client = None
     elif args.backend == "anthropic_conn":
