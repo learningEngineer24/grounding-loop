@@ -98,7 +98,12 @@ def derived_by_period(cat: SemanticCatalog, metric: str, period: str, db=None):
     spec = cat.metrics[metric]
     if metric == "net_realized_revenue":
         rev = monthly_series(cat, "settled_revenue", "payment_date", db)
-        ref = monthly_series(cat, "total_refunds", "refund_date", db)
+        # Refund time dimension follows the semantics version: v1/v2 used the
+        # refund event month; v3 attributes refunds to the original payment's
+        # month. Read it from the catalog instead of hardcoding either.
+        ref_dim = (cat.metrics["total_refunds"].get("attribution") or {}).get(
+            "time_dimension", "refund_date")
+        ref = monthly_series(cat, "total_refunds", ref_dim, db)
         if period in ("Q1", "Q2"):
             r = sum(rev.get(m, 0) for m in months)
             f = sum(ref.get(m, 0) for m in months)
@@ -169,9 +174,21 @@ def _delta(after, before, metric: str):
 
 
 def main():
-    spec = yaml.safe_load(QUESTIONS.read_text())
-    assert spec["definition_version"] == 1
-    cat = SemanticCatalog(ROOT / "phase2" / "semantics_v1.yml")
+    import argparse
+
+    p = argparse.ArgumentParser()
+    p.add_argument("--questions", default=str(QUESTIONS))
+    p.add_argument("--out", default=str(OUT))
+    p.add_argument("--semantics", default=str(ROOT / "phase2" / "semantics_v1.yml"))
+    p.add_argument("--definition-version", type=int, default=1)
+    args = p.parse_args()
+
+    qpath = Path(args.questions)
+    spec = yaml.safe_load(qpath.read_text())
+    assert spec["definition_version"] == args.definition_version, (
+        f"{qpath} is definition_version {spec['definition_version']}, "
+        f"expected {args.definition_version}")
+    cat = SemanticCatalog(args.semantics)
 
     answers = {}
     for q in spec["questions"]:
@@ -186,20 +203,20 @@ def main():
             "metric": q.get("metric") or q.get("metrics"),
             "expected_behavior": q["expected_behavior"],
             "expected": val,
-            "definition_version": 1,
+            "definition_version": args.definition_version,
         }
 
     n_answered = sum(1 for a in answers.values() if a["expected"] is not None)
     doc = {
-        "definition_version": 1,
+        "definition_version": args.definition_version,
         "question_count": len(answers),
         "answered_count": n_answered,
-        "note": "Locked golden answers computed through the semantic compiler. "
+        "note": "Locked answers computed through the semantic compiler. "
                 "Regenerate with phase3/compute_answers.py; do not hand-edit.",
         "answers": answers,
     }
-    OUT.write_text(yaml.safe_dump(doc, sort_keys=False, default_flow_style=False))
-    print(f"wrote {OUT} — {len(answers)} questions, {n_answered} with computed expected values")
+    Path(args.out).write_text(yaml.safe_dump(doc, sort_keys=False, default_flow_style=False))
+    print(f"wrote {args.out} — {len(answers)} questions, {n_answered} with computed expected values")
 
 
 if __name__ == "__main__":

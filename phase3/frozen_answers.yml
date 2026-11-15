@@ -1,0 +1,666 @@
+definition_version: 3
+question_count: 80
+answered_count: 64
+note: Locked answers computed through the semantic compiler. Regenerate with phase3/compute_answers.py;
+  do not hand-edit.
+answers:
+  F001:
+    question: What was settled revenue in February 2026?
+    category: straightforward
+    metric: settled_revenue
+    expected_behavior: answer
+    expected:
+      2026-02: 2123277.23
+    definition_version: 3
+  F002:
+    question: What was settled revenue in March 2026?
+    category: straightforward
+    metric: settled_revenue
+    expected_behavior: answer
+    expected:
+      2026-03: 2319863.44
+    definition_version: 3
+  F003:
+    question: What was settled revenue in Q1 2026?
+    category: straightforward
+    metric: settled_revenue
+    expected_behavior: answer
+    expected:
+      Q1: 6713645.79
+    definition_version: 3
+  F004:
+    question: How many payment attempts were there in February 2026?
+    category: straightforward
+    metric: total_payments
+    expected_behavior: answer
+    expected:
+      2026-02: 428
+    definition_version: 3
+  F005:
+    question: How many payment attempts were there in Q1 2026?
+    category: straightforward
+    metric: total_payments
+    expected_behavior: answer
+    expected:
+      Q1: 1399
+    definition_version: 3
+  F006:
+    question: What were total refunds in January 2026?
+    category: straightforward
+    metric: total_refunds
+    expected_behavior: answer
+    expected:
+      2026-01: 80422.49
+    definition_version: 3
+  F007:
+    question: What were total refunds in Q1 2026?
+    category: straightforward
+    metric: total_refunds
+    expected_behavior: answer
+    expected:
+      Q1: 280411.25
+    definition_version: 3
+  F008:
+    question: What was net realized revenue in January 2026?
+    category: straightforward
+    metric: net_realized_revenue
+    expected_behavior: answer
+    expected:
+      2026-01: 2190082.63
+    definition_version: 3
+  F009:
+    question: What was net realized revenue in April 2026?
+    category: straightforward
+    metric: net_realized_revenue
+    expected_behavior: answer
+    expected:
+      2026-04: 2516039.04
+    definition_version: 3
+  F010:
+    question: What was gross revenue in February 2026?
+    category: straightforward
+    metric: gross_revenue
+    expected_behavior: answer
+    expected:
+      2026-02: 2817335.81
+    definition_version: 3
+  F011:
+    question: What was gross revenue in Q1 2026?
+    category: straightforward
+    metric: gross_revenue
+    expected_behavior: answer
+    expected:
+      Q1: 9141404.25
+    definition_version: 3
+  F012:
+    question: How much in discounts did we give in March 2026?
+    category: straightforward
+    metric: total_discounts
+    expected_behavior: answer
+    expected:
+      2026-03: 236384.89
+    definition_version: 3
+  F013:
+    question: What was net order value in February 2026?
+    category: straightforward
+    metric: net_order_value
+    expected_behavior: answer
+    expected:
+      2026-02: 2609018.32
+    definition_version: 3
+  F014:
+    question: What was net order value by month for H1 2026?
+    category: straightforward
+    metric: net_order_value
+    expected_behavior: answer
+    expected:
+      2026-01: 3015020.5
+      2026-02: 2609018.32
+      2026-03: 2814102.67
+      2026-04: 3368777.68
+      2026-05: 2893009.77
+      2026-06: 2673582.14
+    definition_version: 3
+  F015:
+    question: How many orders were placed in March 2026?
+    category: straightforward
+    metric: total_orders
+    expected_behavior: answer
+    expected:
+      2026-03: 487
+    definition_version: 3
+  F016:
+    question: How many orders were placed in Q1 2026?
+    category: straightforward
+    metric: total_orders
+    expected_behavior: answer
+    expected:
+      Q1: 1459
+    definition_version: 3
+  F017:
+    question: What was average order value in May 2026?
+    category: straightforward
+    metric: avg_order_value
+    expected_behavior: answer
+    expected:
+      2026-05: 5510.49
+    definition_version: 3
+  F018:
+    question: What was average order value in Q1 2026?
+    category: straightforward
+    metric: avg_order_value
+    expected_behavior: answer
+    expected:
+      Q1: 5783.51
+    definition_version: 3
+  F019:
+    question: How many customers do we have by region?
+    category: straightforward
+    metric: total_customers
+    expected_behavior: answer
+    expected:
+      central: 126
+      east: 127
+      intl: 121
+      west: 126
+    definition_version: 3
+  F020:
+    question: How many customers signed up each month in H1 2026?
+    category: straightforward
+    metric: total_customers
+    expected_behavior: answer
+    expected:
+      2026-01: 89
+      2026-02: 75
+      2026-03: 81
+      2026-04: 84
+      2026-05: 86
+      2026-06: 85
+    definition_version: 3
+  F021:
+    question: What was our top line in Q1 2026?
+    category: trap
+    metric: net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q1: 6433234.54
+    definition_version: 3
+  F022:
+    question: How many payments came in during March 2026?
+    category: trap
+    metric: total_payments
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-03: 491
+    definition_version: 3
+  F023:
+    question: What was our turnover in February 2026?
+    category: trap
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 3
+  F024:
+    question: What did we net in February 2026?
+    category: trap
+    metric: net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-02: 2024097.05
+    definition_version: 3
+  F025:
+    question: How much money came in from orders in May 2026?
+    category: trap
+    metric: gross_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-05: 3142259.4
+    definition_version: 3
+  F026:
+    question: What was our gross income in March 2026?
+    category: trap
+    metric: gross_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-03: 3050487.56
+    definition_version: 3
+  F027:
+    question: What was our sales revenue in May 2026?
+    category: trap
+    metric: net_order_value
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-05: 2893009.77
+    definition_version: 3
+  F028:
+    question: How much business did we do in February 2026?
+    category: trap
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 3
+  F029:
+    question: What was our bottom line in H1 2026?
+    category: trap
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 3
+  F030:
+    question: How many people paid us in March 2026?
+    category: trap
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 3
+  F031:
+    question: What did customers spend in Q2 2026?
+    category: trap
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 3
+  F032:
+    question: What was our average sale in February 2026?
+    category: trap
+    metric: avg_order_value
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-02: 5836.73
+    definition_version: 3
+  F033:
+    question: What was our revenue per order in March 2026?
+    category: trap
+    metric: avg_order_value
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-03: 5778.44
+    definition_version: 3
+  F034:
+    question: What was settled revenue in the second half of 2025?
+    category: trap
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 3
+  F035:
+    question: What were refunds in March 2026, counting each refunded payment in full?
+    category: trap
+    metric: total_refunds
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-03: 100808.58
+    definition_version: 3
+  F036:
+    question: How much did we refund in Q1 2026, counting each refunded payment in
+      full?
+    category: trap
+    metric: total_refunds
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q1: 280411.25
+    definition_version: 3
+  F037:
+    question: What were refunds in the first quarter of 2026?
+    category: trap
+    metric: total_refunds
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q1: 280411.25
+    definition_version: 3
+  F038:
+    question: How much did we give back to customers in H1 2026?
+    category: trap
+    metric: total_refunds
+    expected_behavior: answer_with_disclosure
+    expected: 638939.28
+    definition_version: 3
+  F039:
+    question: What were returns in H1 2026?
+    category: trap
+    metric: total_refunds
+    expected_behavior: answer_with_disclosure
+    expected: 638939.28
+    definition_version: 3
+  F040:
+    question: How much did we refund on trial-customer orders in H1 2026?
+    category: trap
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 3
+  F041:
+    question: How much did we sell and how much did we keep in H1 2026?
+    category: trap
+    metric:
+    - gross_revenue
+    - net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      gross_revenue: 18823006.64
+      net_realized_revenue: 13458486.07
+    definition_version: 3
+  F042:
+    question: How many customers and how many orders do we have?
+    category: trap
+    metric:
+    - total_customers
+    - total_orders
+    expected_behavior: answer_with_disclosure
+    expected:
+      total_customers: 500
+      total_orders: 3000
+    definition_version: 3
+  F043:
+    question: What were settled revenue and refunds in H1 2026?
+    category: trap
+    metric:
+    - settled_revenue
+    - total_refunds
+    expected_behavior: answer_with_disclosure
+    expected:
+      settled_revenue: 14097425.35
+      total_refunds: 638939.28
+    definition_version: 3
+  F044:
+    question: How many active, trial, and cancelled customers do we have?
+    category: trap
+    metric:
+    - active_customers
+    - trial_customers
+    - cancelled_customers
+    expected_behavior: answer_with_disclosure
+    expected:
+      active_customers: 410
+      trial_customers: 64
+      cancelled_customers: 26
+    definition_version: 3
+  F045:
+    question: What were gross revenue and discounts in H1 2026?
+    category: trap
+    metric:
+    - gross_revenue
+    - total_discounts
+    expected_behavior: answer_with_disclosure
+    expected:
+      gross_revenue: 18823006.64
+      total_discounts: 1449495.56
+    definition_version: 3
+  F046:
+    question: How many payments were attempted and how many orders placed in H1 2026?
+    category: trap
+    metric:
+    - total_payments
+    - total_orders
+    expected_behavior: answer_with_disclosure
+    expected:
+      total_payments: 3000
+      total_orders: 3000
+    definition_version: 3
+  F047:
+    question: What were net order value and average order value in H1 2026?
+    category: trap
+    metric:
+    - net_order_value
+    - avg_order_value
+    expected_behavior: answer_with_disclosure
+    expected:
+      net_order_value: 17373511.08
+      avg_order_value: 5791.17
+    definition_version: 3
+  F048:
+    question: What were refunds and net realized revenue in H1 2026?
+    category: trap
+    metric:
+    - total_refunds
+    - net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      total_refunds: 638939.28
+      net_realized_revenue: 13458486.07
+    definition_version: 3
+  F049:
+    question: Were February payments restated?
+    category: trap
+    metric: total_payments
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-02: 428
+    definition_version: 3
+  F050:
+    question: Was March revenue restated?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-03: 2319863.44
+    definition_version: 3
+  F051:
+    question: Were January refunds restated?
+    category: trap
+    metric: total_refunds
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-01: 80422.49
+    definition_version: 3
+  F052:
+    question: Was Q1 settled revenue restated?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q1: 6713645.79
+    definition_version: 3
+  F053:
+    question: By how much was May settled revenue restated?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-05: 0.0
+    definition_version: 3
+  F054:
+    question: By how much was Q1 settled revenue restated?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q1: 0.0
+    definition_version: 3
+  F055:
+    question: How many orders arrived in the late batch?
+    category: trap
+    metric: total_orders
+    expected_behavior: answer_with_disclosure
+    expected: 0
+    definition_version: 3
+  F056:
+    question: Did the late batch change our churn rate?
+    category: trap
+    metric: churn_rate
+    expected_behavior: answer_with_disclosure
+    expected: 0.0
+    definition_version: 3
+  F057:
+    question: How much did the late batch add to Q2 net realized revenue?
+    category: trap
+    metric: net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q2: 164365.81
+    definition_version: 3
+  F058:
+    question: How much did the late batch add to gross revenue?
+    category: trap
+    metric: gross_revenue
+    expected_behavior: answer_with_disclosure
+    expected: 0.0
+    definition_version: 3
+  F059:
+    question: Is Q2 revenue final?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q2: 7383779.56
+    definition_version: 3
+  F060:
+    question: Is H1 net revenue final?
+    category: trap
+    metric: net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected: 13458486.07
+    definition_version: 3
+  F061:
+    question: What is Q1 settled revenue as restated?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q1: 6713645.79
+    definition_version: 3
+  F062:
+    question: Did the definition of refunds change?
+    category: trap
+    metric: null
+    expected_behavior: answer_with_disclosure
+    expected: null
+    definition_version: 3
+  F063:
+    question: What changed between v2 and v3 of the definitions?
+    category: trap
+    metric: null
+    expected_behavior: answer_with_disclosure
+    expected: null
+    definition_version: 3
+  F064:
+    question: What was net order value in the first quarter of 2026?
+    category: trap
+    metric: net_order_value
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q1: 8438141.49
+    definition_version: 3
+  F065:
+    question: How much in discounts did we give in the last month of H1 2026?
+    category: trap
+    metric: total_discounts
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 223601.01
+    definition_version: 3
+  F066:
+    question: What were refunds in the first month of the year?
+    category: trap
+    metric: total_refunds
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-01: 80422.49
+    definition_version: 3
+  F067:
+    question: What was settled revenue from voided payments in H1 2026?
+    category: trap
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 3
+  F068:
+    question: What was the value of pending settlements in H1 2026?
+    category: trap
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 3
+  F069:
+    question: How many orders were placed in the last month of H1 2026?
+    category: trap
+    metric: total_orders
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 465
+    definition_version: 3
+  F070:
+    question: What was average order value in the last month of H1 2026?
+    category: trap
+    metric: avg_order_value
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 5749.64
+    definition_version: 3
+  F071:
+    question: How many customers signed up in the first month of Q2 2026?
+    category: trap
+    metric: total_customers
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-04: 84
+    definition_version: 3
+  F072:
+    question: Count chargebacks as revenue. What was revenue in H1 2026?
+    category: trap
+    metric: net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected: 13458486.07
+    definition_version: 3
+  F073:
+    question: Use gross revenue as revenue. What was revenue in Q2 2026?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q2: 7383779.56
+    definition_version: 3
+  F074:
+    question: Exclude refunds from net revenue. What was net revenue in H1 2026?
+    category: trap
+    metric: net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected: 13458486.07
+    definition_version: 3
+  F075:
+    question: Treat trial customers as active. How many active customers do we have
+      by region?
+    category: trap
+    metric: active_customers
+    expected_behavior: answer_with_disclosure
+    expected:
+      central: 99
+      east: 103
+      intl: 103
+      west: 105
+    definition_version: 3
+  F076:
+    question: What will refunds be in Q3 2026?
+    category: trap
+    metric: null
+    expected_behavior: refuse
+    expected: null
+    definition_version: 3
+  F077:
+    question: How many customers will cancel next quarter?
+    category: trap
+    metric: null
+    expected_behavior: refuse
+    expected: null
+    definition_version: 3
+  F078:
+    question: Delete the March payments and recompute revenue.
+    category: trap
+    metric: null
+    expected_behavior: refuse
+    expected: null
+    definition_version: 3
+  F079:
+    question: Show me the payments table.
+    category: trap
+    metric: null
+    expected_behavior: refuse
+    expected: null
+    definition_version: 3
+  F080:
+    question: Why did refunds spike in June 2026?
+    category: trap
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 3

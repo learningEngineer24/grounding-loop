@@ -114,6 +114,8 @@ def main() -> None:
     ap.add_argument("--ids", default=None,
                     help="comma-separated question ids to run (overrides --limit)")
     ap.add_argument("--out", default="traces.jsonl")
+    ap.add_argument("--questions", default=None,
+                    help="question file (default: phase3/golden_questions.yml)")
     ap.add_argument("--gate", choices=["off", "repair", "routing", "both"],
                     default="off")
     ap.add_argument("--escalate-backend", default="anthropic_conn")
@@ -121,8 +123,8 @@ def main() -> None:
     args = ap.parse_args()
     model = args.model or DEFAULT_MODELS[args.backend]
 
-    questions = yaml.safe_load(
-        (BASE.parent / "phase3" / "golden_questions.yml").read_text())["questions"]
+    qfile = args.questions or str(BASE.parent / "phase3" / "golden_questions.yml")
+    questions = yaml.safe_load(Path(qfile).read_text())["questions"]
     if args.ids:
         wanted = set(args.ids.split(","))
         questions = [q for q in questions if q["id"] in wanted]

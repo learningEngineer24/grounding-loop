@@ -17,7 +17,7 @@ from semantic_compiler import SemanticCatalog  # noqa: E402
 
 BASE = Path(__file__).resolve().parent
 CATALOG_PATH = Path(os.environ.get("GROUNDING_SEMANTICS",
-                                   BASE.parent / "phase2" / "semantics_v1.yml"))
+                                   BASE.parent / "phase2" / "semantics_v3.yml"))
 # Phase 5 drift runs point this at a snapshot DB instead.
 DB_PATH = Path(os.environ.get("GROUNDING_DB", BASE.parent / "warehouse.duckdb"))
 # When set (Phase 5), describe_metric exposes freshness/restatement metadata.

@@ -191,12 +191,19 @@ def score_one(trace, q, ans) -> dict:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--traces", default="traces.jsonl")
+    ap.add_argument("--questions", default=None,
+                    help="question file (default: phase3/golden_questions.yml)")
+    ap.add_argument("--answers", default=None,
+                    help="answers file (default: phase3/golden_answers.yml)")
+    ap.add_argument("--scores-out", default="scores.json",
+                    help="where to write the scored results")
     args = ap.parse_args()
 
+    qfile = args.questions or str(BASE.parent / "phase3" / "golden_questions.yml")
+    afile = args.answers or str(BASE.parent / "phase3" / "golden_answers.yml")
     questions = {q["id"]: q for q in yaml.safe_load(
-        (BASE.parent / "phase3" / "golden_questions.yml").read_text())["questions"]}
-    answers = yaml.safe_load(
-        (BASE.parent / "phase3" / "golden_answers.yml").read_text())["answers"]
+        Path(qfile).read_text())["questions"]}
+    answers = yaml.safe_load(Path(afile).read_text())["answers"]
     traces = [json.loads(l) for l in (BASE / args.traces).read_text().splitlines()]
 
     scored = [score_one(t, questions[t["id"]], answers[t["id"]]) for t in traces]
@@ -208,10 +215,10 @@ def main() -> None:
     print(f"## Harness results — {len(scored)} questions\n")
     print(f"behavior accuracy : {pct([s['behavior_ok'] for s in scored])}")
     ans = [s for s in scored if s["numeric_ok"] is not None]
-    print(f"numeric accuracy  : {pct([s['numeric_ok'] for s in ans])} (42 answerable)")
+    print(f"numeric accuracy  : {pct([s['numeric_ok'] for s in ans])} ({len(ans)} answerable)")
     print(f"metric selection  : {pct([s['metric_ok'] for s in ans])}")
     disc = [s for s in scored if s["disclosure_ok"] is not None]
-    print(f"disclosure rate   : {pct([s['disclosure_ok'] for s in disc])} (12 disclosure-expected)")
+    print(f"disclosure rate   : {pct([s['disclosure_ok'] for s in disc])} ({len(disc)} disclosure-expected)")
     for cat in ["straightforward", "trap", "ambiguous"]:
         c = [s for s in scored if s["category"] == cat]
         print(f"  {cat:15s} behavior {pct([s['behavior_ok'] for s in c])}", end="")
@@ -232,8 +239,8 @@ def main() -> None:
                   f"(terminal={s['terminal']})")
             print(f"    -> {txt[:160]}")
 
-    (BASE / "scores.json").write_text(json.dumps(scored, indent=2))
-    print("\nwrote phase4/scores.json")
+    (BASE / args.scores_out).write_text(json.dumps(scored, indent=2))
+    print(f"\nwrote phase4/{args.scores_out}")
 
 
 if __name__ == "__main__":
