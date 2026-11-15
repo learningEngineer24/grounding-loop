@@ -24,27 +24,50 @@ sys.path.insert(0, str(BASE.parent / "phase4"))  # reuse the phase4 venv deps
 
 import agent_sql_gemini  # noqa: E402
 import agent_sql_anthropic  # noqa: E402
+import agent_sql_openai  # noqa: E402
+import agent_sql_openrouter  # noqa: E402
+# agent_sql_atem is imported lazily in main(): it raises at import time when
+# OLLAMA_BASE_URL is unset, and must not break the other backends.
+from costs import attach_cost  # noqa: E402
 
 DEFAULT_MODELS = {"sql_gemini": "gemini-3.8-flash",
-                  "sql_anthropic": "claude-haiku-4-5-20251001"}
+                  "sql_anthropic": "claude-sonnet-5-5",
+                  "sql_openai": "gpt-6.1-sol",
+                  "sql_openrouter": "meta/muse-ember",
+                  "sql_atem": ("hf.co/meta-models/Muse-Glimmer-30B-GGUF:"
+                               "Muse-Glimmer-30B-KQuant-17GB-Q4_K_M")}
+
+RUNNERS = {"sql_gemini": agent_sql_gemini.run_question,
+           "sql_anthropic": agent_sql_anthropic.run_question,
+           "sql_openai": agent_sql_openai.run_question,
+           "sql_openrouter": agent_sql_openrouter.run_question}
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--backend", choices=["sql_gemini", "sql_anthropic"],
+    ap.add_argument("--backend", choices=list(DEFAULT_MODELS),
                     default="sql_gemini")
     ap.add_argument("--model", default=None)
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--ids", default=None,
+                    help="comma-separated question ids to run (overrides --limit)")
+    ap.add_argument("--questions", default=None,
+                    help="question file (default: phase3/golden_questions.yml)")
     ap.add_argument("--out", default="traces_nolayer.jsonl")
     args = ap.parse_args()
     model = args.model or DEFAULT_MODELS[args.backend]
-    run_one = (agent_sql_anthropic.run_question
-               if args.backend == "sql_anthropic"
-               else agent_sql_gemini.run_question)
+    if args.backend == "sql_atem":
+        import agent_sql_atem  # noqa: E402  (needs OLLAMA_BASE_URL at import)
+        run_one = agent_sql_atem.run_question
+    else:
+        run_one = RUNNERS[args.backend]
 
-    questions = yaml.safe_load(
-        (BASE.parent / "phase3" / "golden_questions.yml").read_text())["questions"]
-    if args.limit:
+    qfile = args.questions or str(BASE.parent / "phase3" / "golden_questions.yml")
+    questions = yaml.safe_load(Path(qfile).read_text())["questions"]
+    if args.ids:
+        wanted = set(args.ids.split(","))
+        questions = [q for q in questions if q["id"] in wanted]
+    elif args.limit:
         questions = questions[:args.limit]
 
     out_path = BASE / args.out
@@ -61,6 +84,7 @@ def main() -> None:
             trace["category"] = q["category"]
             trace["backend"] = args.backend
             trace["model"] = model
+            attach_cost(trace, model)
             f.write(json.dumps(trace, default=str) + "\n")
             f.flush()
             time.sleep(1)

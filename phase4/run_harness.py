@@ -25,11 +25,12 @@ from pathlib import Path
 import yaml
 
 import agent
+from costs import attach_cost
 
 BASE = Path(__file__).resolve().parent
 
-DEFAULT_MODELS = {"anthropic": "claude-haiku-4-5-20251001",
-                "anthropic_conn": "claude-haiku-4-5-20251001",
+DEFAULT_MODELS = {"anthropic": "claude-sonnet-5-5",
+                "anthropic_conn": "claude-sonnet-5-5",
                 "gemini": "gemini-3.8-flash",
                 "openai": "gpt-6.1-sol",
                 "ember": "muse-ember-1.0",
@@ -166,6 +167,7 @@ def main() -> None:
             trace["category"] = q["category"]
             trace["backend"] = args.backend
             trace["model"] = model
+            attach_cost(trace, model)
             f.write(json.dumps(trace, default=str) + "\n")
             f.flush()
             time.sleep(1)  # be a polite API citizen

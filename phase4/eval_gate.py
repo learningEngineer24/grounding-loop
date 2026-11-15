@@ -32,21 +32,10 @@ from pathlib import Path
 
 import yaml
 
+from costs import PRICES, SELF_HOSTED_MODELS, cost_usd, price_for  # noqa: F401
 from score import score_one
 
 BASE = Path(__file__).resolve().parent
-
-# $ per million tokens (input / output), verified Nov 15, 2026.
-PRICES = {
-    "claude-sonnet-5-5": (2.0, 10.0),
-    "gpt-6.1-sol": (2.0, 10.0),
-    "meta/muse-ember": (0.10, 0.50),
-    "muse-ember-1.0": (0.10, 0.50),
-}
-# Self-hosted: $0 marginal token cost.
-SELF_HOSTED_MODELS = {
-    "hf.co/meta-models/Muse-Glimmer-30B-GGUF:Muse-Glimmer-30B-KQuant-17GB-Q4_K_M",
-}
 
 CHEAP_BACKENDS = {"ember", "openrouter", "ollama", "atem"}
 
@@ -77,18 +66,6 @@ def _golden():
         _ANSWERS = yaml.safe_load(
             (BASE.parent / "phase3" / "golden_answers.yml").read_text())["answers"]
     return _QUESTIONS, _ANSWERS
-
-
-def price_for(model: str) -> tuple[float, float]:
-    if model in SELF_HOSTED_MODELS:
-        return (0.0, 0.0)
-    return PRICES.get(model, (0.0, 0.0))
-
-
-def cost_usd(model: str, usage: dict) -> float:
-    pin, pout = price_for(model)
-    return (usage.get("input_tokens", 0) / 1e6 * pin
-            + usage.get("output_tokens", 0) / 1e6 * pout)
 
 
 def grade(trace: dict, qid: str) -> dict:

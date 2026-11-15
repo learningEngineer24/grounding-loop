@@ -1,0 +1,7 @@
+# Runtime deps for the phase4/phase4b harnesses.
+# The repo venv was missing the Anthropic SDK on Nov 15, 2026, which broke
+# run_harness.py at import (agent.py imports anthropic at top level).
+# Install with: .venv/bin/pip install -r requirements.txt
+anthropic==2.8.0
+PyYAML==6.0.3
+duckdb==1.5.6
