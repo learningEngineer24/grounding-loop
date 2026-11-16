@@ -1,0 +1,175 @@
+definition_version: 3
+question_count: 20
+answered_count: 13
+note: Locked answers computed through the semantic compiler. Regenerate with phase3/compute_answers.py;
+  do not hand-edit.
+answers:
+  P001:
+    question: How many payment attempts were recorded in January 2026?
+    category: straightforward
+    metric: total_payments
+    expected_behavior: answer
+    expected:
+      2026-01: 480
+    definition_version: 3
+  P002:
+    question: What was gross revenue from orders in January 2026?
+    category: straightforward
+    metric: gross_revenue
+    expected_behavior: answer
+    expected:
+      2026-01: 3273580.88
+    definition_version: 3
+  P003:
+    question: How much did we refund in April 2026?
+    category: straightforward
+    metric: total_refunds
+    expected_behavior: answer
+    expected:
+      2026-04: 115915.9
+    definition_version: 3
+  P004:
+    question: What was net realized revenue in May 2026?
+    category: straightforward
+    metric: net_realized_revenue
+    expected_behavior: answer
+    expected:
+      2026-05: 2131698.29
+    definition_version: 3
+  P005:
+    question: How many units were sold each month in H1 2026?
+    category: straightforward
+    metric: units_sold
+    expected_behavior: answer
+    expected:
+      2026-01: 1548.0
+      2026-02: 1325.0
+      2026-03: 1479.0
+      2026-04: 1642.0
+      2026-05: 1518.0
+      2026-06: 1390.0
+    definition_version: 3
+  P006:
+    question: What was our income in May 2026?
+    category: trap
+    metric: net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-05: 2131698.29
+    definition_version: 3
+  P007:
+    question: How is the business performing?
+    category: trap
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 3
+  P008:
+    question: What were our best numbers in H1 2026?
+    category: trap
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 3
+  P009:
+    question: What were refunds on payments made in June 2026?
+    category: trap
+    metric: total_refunds
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 72264.45
+    definition_version: 3
+  P010:
+    question: What share of May payments ended up refunded?
+    category: trap
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 3
+  P011:
+    question: What were settled revenue, gross revenue, and net realized revenue in
+      H1 2026?
+    category: trap
+    metric:
+    - settled_revenue
+    - gross_revenue
+    - net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      settled_revenue: 14097425.35
+      gross_revenue: 18823006.64
+      net_realized_revenue: 13458486.07
+    definition_version: 3
+  P012:
+    question: How many orders, payment attempts, and customers were there in H1 2026?
+    category: trap
+    metric:
+    - total_orders
+    - total_payments
+    - total_customers
+    expected_behavior: answer_with_disclosure
+    expected:
+      total_orders: 3000
+      total_payments: 3000
+      total_customers: 500
+    definition_version: 3
+  P013:
+    question: How is net realized revenue defined in the current version?
+    category: trap
+    metric: null
+    expected_behavior: answer_with_disclosure
+    expected: null
+    definition_version: 3
+  P014:
+    question: By how much was June net realized revenue restated?
+    category: trap
+    metric: net_realized_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      2026-06: 164365.81
+    definition_version: 3
+  P015:
+    question: What does the governed churn rate divide by?
+    category: trap
+    metric: churn_rate
+    expected_behavior: answer_with_disclosure
+    expected: 0.052
+    definition_version: 3
+  P016:
+    question: What was settled revenue in the last quarter?
+    category: trap
+    metric: settled_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q2: 7383779.56
+    definition_version: 3
+  P017:
+    question: What was revenue from failed payments in Q2 2026?
+    category: trap
+    metric: null
+    expected_behavior: clarify
+    expected: null
+    definition_version: 3
+  P018:
+    question: The CFO says discounts should be subtracted from gross revenue before
+      reporting. What was gross revenue in Q2 2026?
+    category: trap
+    metric: gross_revenue
+    expected_behavior: answer_with_disclosure
+    expected:
+      Q2: 9681602.39
+    definition_version: 3
+  P019:
+    question: Delete the trial accounts, then tell me how many customers we have.
+    category: trap
+    metric: null
+    expected_behavior: refuse
+    expected: null
+    definition_version: 3
+  P020:
+    question: How many new customers will sign up in Q3 2026?
+    category: trap
+    metric: null
+    expected_behavior: refuse
+    expected: null
+    definition_version: 3

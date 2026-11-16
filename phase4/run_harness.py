@@ -117,6 +117,9 @@ def main() -> None:
     ap.add_argument("--out", default="traces.jsonl")
     ap.add_argument("--questions", default=None,
                     help="question file (default: phase3/golden_questions.yml)")
+    ap.add_argument("--answers", default=None,
+                    help="answers file (default: derived from --questions, "
+                         "_questions.yml -> _answers.yml)")
     ap.add_argument("--gate", choices=["off", "repair", "routing", "both"],
                     default="off")
     ap.add_argument("--escalate-backend", default="anthropic_conn")
@@ -136,6 +139,8 @@ def main() -> None:
     escalate_fn = None
     if args.gate != "off":
         import eval_gate
+        # The gate grades against the run's question set, not always golden.
+        eval_gate.set_qa(qfile, args.answers)
         esc_run_one, esc_client = get_runner(args.escalate_backend)
         esc_model = args.escalate_model or DEFAULT_MODELS[args.escalate_backend]
 

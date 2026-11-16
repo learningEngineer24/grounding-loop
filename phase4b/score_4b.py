@@ -25,14 +25,18 @@ import score as governed_score  # noqa: E402 — reuse behavior/numeric/disclosu
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--traces", default="traces_nolayer.jsonl")
+    ap.add_argument("--questions", default=None,
+                    help="question file (default: phase3/golden_questions.yml)")
+    ap.add_argument("--answers", default=None,
+                    help="answers file (default: phase3/golden_answers.yml)")
     ap.add_argument("--scores-out", default="scores_4b.json",
                     help="where to write the scored results (default: scores_4b.json)")
     args = ap.parse_args()
 
-    questions = {q["id"]: q for q in yaml.safe_load(
-        (BASE.parent / "phase3" / "golden_questions.yml").read_text())["questions"]}
-    answers = yaml.safe_load(
-        (BASE.parent / "phase3" / "golden_answers.yml").read_text())["answers"]
+    qfile = args.questions or str(BASE.parent / "phase3" / "golden_questions.yml")
+    afile = args.answers or str(BASE.parent / "phase3" / "golden_answers.yml")
+    questions = {q["id"]: q for q in yaml.safe_load(Path(qfile).read_text())["questions"]}
+    answers = yaml.safe_load(Path(afile).read_text())["answers"]
     traces = [json.loads(l) for l in (BASE / args.traces).read_text().splitlines()]
 
     scored = []

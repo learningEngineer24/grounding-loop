@@ -56,15 +56,32 @@ _CHECK_HINTS = {
 
 _QUESTIONS = None
 _ANSWERS = None
+_QA_FILES = (None, None)  # (questions path, answers path); None = golden set
+
+
+def set_qa(questions_path, answers_path=None):
+    """Point the gate's grader at a question set other than the golden set
+    (e.g. the Phase 5 pilot set). answers_path defaults to the questions
+    path with _questions.yml -> _answers.yml. Call before any run_gated."""
+    global _QUESTIONS, _ANSWERS, _QA_FILES
+    if answers_path is None:
+        qp = str(questions_path)
+        answers_path = (qp.replace("_questions.yml", "_answers.yml")
+                        if "_questions.yml" in qp else
+                        str(BASE.parent / "phase3" / "golden_answers.yml"))
+    _QA_FILES = (str(questions_path), str(answers_path))
+    _QUESTIONS = _ANSWERS = None
 
 
 def _golden():
     global _QUESTIONS, _ANSWERS
     if _QUESTIONS is None:
+        qfile, afile = _QA_FILES
+        qfile = qfile or str(BASE.parent / "phase3" / "golden_questions.yml")
+        afile = afile or str(BASE.parent / "phase3" / "golden_answers.yml")
         _QUESTIONS = {q["id"]: q for q in yaml.safe_load(
-            (BASE.parent / "phase3" / "golden_questions.yml").read_text())["questions"]}
-        _ANSWERS = yaml.safe_load(
-            (BASE.parent / "phase3" / "golden_answers.yml").read_text())["answers"]
+            Path(qfile).read_text())["questions"]}
+        _ANSWERS = yaml.safe_load(Path(afile).read_text())["answers"]
     return _QUESTIONS, _ANSWERS
 
 
