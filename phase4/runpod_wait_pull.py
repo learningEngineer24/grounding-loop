@@ -15,11 +15,13 @@ import urllib.request
 POD = os.environ["POD_ID"]
 MODEL = "hf.co/meta-models/Muse-Glimmer-30B-GGUF:Muse-Glimmer-30B-KQuant-17GB-Q4_K_M"
 BASE = f"https://{POD}-11434.proxy.runpod.net"
+UA = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"}
 
 print(f"waiting for Ollama on {BASE} ...", flush=True)
 for i in range(90):
     try:
-        with urllib.request.urlopen(BASE + "/api/tags", timeout=15) as resp:
+        req = urllib.request.Request(BASE + "/api/tags", headers=UA)
+        with urllib.request.urlopen(req, timeout=15) as resp:
             print("Ollama up after", (i + 1) * 10, "s", flush=True)
             break
     except Exception:
@@ -38,7 +40,8 @@ print("pull exit:", proc.returncode, flush=True)
 tail = proc.stdout.strip().splitlines()[-2:]
 print("\n".join(tail), flush=True)
 
-with urllib.request.urlopen(BASE + "/api/tags", timeout=30) as resp:
+req = urllib.request.Request(BASE + "/api/tags", headers=UA)
+with urllib.request.urlopen(req, timeout=30) as resp:
     tags = json.load(resp)
 names = [m["name"] for m in tags.get("models", [])]
 print("models on pod:", names, flush=True)

@@ -97,6 +97,75 @@ DISCLOSURE_KEYWORDS = {
 }
 DISCLOSURE_ALL = {"Q111"}
 
+# Frozen-set disclosures (F001-F080), derived the same way from the
+# `disclosure` field in phase3/frozen_questions.yml: 1-3 salient words
+# from the disclosure text (any-of), except the "Reported X and Y,
+# labeled" questions, where every named metric must appear (ALL).
+DISCLOSURE_KEYWORDS_FROZEN = {
+    "F021": ["net"],
+    "F022": ["attempts"],
+    "F024": ["original", "payment month"],
+    "F025": ["gross"],
+    "F026": ["gross"],
+    "F027": ["net", "discount"],
+    "F032": ["free", "add-on", "addon"],
+    "F033": ["free", "add-on", "addon"],
+    "F035": ["actual"],
+    "F036": ["actual"],
+    "F037": ["original", "payment month"],
+    "F038": ["actual"],
+    "F039": ["refund"],
+    "F041": ["gross_revenue", "net_realized_revenue"],  # ALL required
+    "F042": ["total_customers", "total_orders"],  # ALL required
+    "F043": ["settled_revenue", "total_refunds"],  # ALL required
+    "F044": ["active_customers", "trial_customers", "cancelled_customers"],  # ALL required
+    "F045": ["gross_revenue", "total_discounts"],  # ALL required
+    "F046": ["total_payments", "total_orders"],  # ALL required
+    "F047": ["net_order_value", "avg_order_value"],  # ALL required
+    "F048": ["total_refunds", "net_realized_revenue"],  # ALL required
+    "F049": ["restat", "late"],
+    "F050": ["restat", "june"],
+    "F051": ["restat", "june"],
+    "F052": ["restat", "june"],
+    "F053": ["restat", "june"],
+    "F054": ["restat", "zero"],
+    "F055": ["late", "zero"],
+    "F056": ["late", "zero"],
+    "F057": ["restat", "late"],
+    "F058": ["late", "zero"],
+    "F059": ["final", "restat"],
+    "F060": ["final", "restat"],
+    "F061": ["restat", "original"],
+    "F062": ["original", "payment month"],
+    "F063": ["original", "payment month"],
+    "F064": ["net", "discount"],
+    "F065": ["discount"],
+    "F066": ["actual"],
+    "F069": ["june"],
+    "F070": ["free", "add-on", "addon"],
+    "F071": ["april"],
+    "F072": ["net"],
+    "F073": ["settled"],
+    "F074": ["net"],
+    "F075": ["paid"],
+}
+DISCLOSURE_ALL_FROZEN = {"F041", "F042", "F043", "F044", "F045", "F046", "F047", "F048"}
+
+# Pilot-set disclosures (P001-P020), derived the same way from
+# phase3/pilot_questions.yml.
+DISCLOSURE_KEYWORDS_PILOT = {
+    "P006": ["net"],
+    "P009": ["original", "payment month"],
+    "P011": ["settled_revenue", "gross_revenue", "net_realized_revenue"],  # ALL required
+    "P012": ["total_orders", "total_payments", "total_customers"],  # ALL required
+    "P013": ["settled", "actual"],
+    "P014": ["restat", "late"],
+    "P015": ["simplification", "cancelled"],
+    "P016": ["settled"],
+    "P018": ["gross"],
+}
+DISCLOSURE_ALL_PILOT = {"P011", "P012"}
+
 MONEY_TOL = 0.02
 RATE_TOL = 1e-4
 
@@ -178,13 +247,19 @@ def score_one(trace, q, ans) -> dict:
     else:
         result["numeric_ok"] = any(close(n, expected) for n in reported)
 
-    # --- disclosure (expected_behavior gate: 11 traps + Q208) ---
-    if q.get("expected_behavior") == "answer_with_disclosure" and qid in DISCLOSURE_KEYWORDS:
-        kws = DISCLOSURE_KEYWORDS[qid]
-        low = text.lower()
-        hits = [k for k in kws if k in low]
-        result["disclosure_ok"] = (len(hits) == len(kws)
-                                   if qid in DISCLOSURE_ALL else bool(hits))
+    # --- disclosure (expected_behavior gate: answer_with_disclosure) ---
+    if q.get("expected_behavior") == "answer_with_disclosure":
+        table, all_set = DISCLOSURE_KEYWORDS, DISCLOSURE_ALL
+        if qid.startswith("F"):
+            table, all_set = DISCLOSURE_KEYWORDS_FROZEN, DISCLOSURE_ALL_FROZEN
+        elif qid.startswith("P"):
+            table, all_set = DISCLOSURE_KEYWORDS_PILOT, DISCLOSURE_ALL_PILOT
+        if qid in table:
+            kws = table[qid]
+            low = text.lower()
+            hits = [k for k in kws if k in low]
+            result["disclosure_ok"] = (len(hits) == len(kws)
+                                       if qid in all_set else bool(hits))
     return result
 
 

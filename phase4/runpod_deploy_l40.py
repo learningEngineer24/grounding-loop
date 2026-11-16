@@ -25,6 +25,7 @@ mutation {
     imageName: "ollama/ollama"
     name: "glimmer-30b"
     volumeInGb: 50
+    volumeMountPath: "/workspace"
     containerDiskInGb: 50
     ports: "11434/http"
     env: [{key: "OLLAMA_HOST", value: "0.0.0.0:11434"}]
