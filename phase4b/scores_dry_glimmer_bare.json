@@ -1,0 +1,52 @@
+[
+  {
+    "id": "Q001",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "no_decision",
+    "behavior_ok": false,
+    "numeric_ok": false,
+    "metric_ok": null,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q002",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "no_decision",
+    "behavior_ok": false,
+    "numeric_ok": false,
+    "metric_ok": null,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q003",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "ask_clarify",
+    "behavior_ok": false,
+    "numeric_ok": false,
+    "metric_ok": null,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q004",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": null,
+    "disclosure_ok": null
+  },
+  {
+    "id": "Q005",
+    "category": "straightforward",
+    "expected_behavior": "answer",
+    "terminal": "submit_answer",
+    "behavior_ok": true,
+    "numeric_ok": true,
+    "metric_ok": null,
+    "disclosure_ok": null
+  }
+]

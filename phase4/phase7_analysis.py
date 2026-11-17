@@ -1,9 +1,16 @@
-"""Phase 7 analysis for Grounding Loop part 4: score the 9 frozen cells,
+"""Phase 7 analysis for Grounding Loop part 4: score the frozen cells,
 compute costs and gate detail, and paired bootstrap CIs.
 
 Reads phase4/scores_frozen_*.json, phase4b/scores_frozen_*_bare.json,
 and the trace files. Writes nothing except stdout (JSON summary).
 Deterministic: random.seed(0), 10,000 resamples, pure Python.
+
+Nov 16, 2026 addendum: Glimmer cells added (bare/layer/gate) plus
+Glimmer comparisons. The 9-cell rows and CIs are unchanged.
+Glimmer trace cost_usd is $0 for bare/layer (self-hosted, $0 marginal
+token cost per phase4/costs.py); the gate cell's $1.0084 is Sonnet
+escalation cost only. RunPod rental is NOT in cost_usd — see the
+addendum write-up for the rental and hosted-equivalent cost views.
 """
 import json
 import random
@@ -21,6 +28,9 @@ CELLS = [
     ("ember", "bare", "phase4b/scores_frozen_ember_bare.json", "phase4b/traces_frozen_ember_bare.jsonl"),
     ("ember", "layer", "phase4/scores_frozen_ember_layer.json", "phase4/traces_frozen_ember_layer.jsonl"),
     ("ember", "gate", "phase4/scores_frozen_ember_gate.json", "phase4/traces_frozen_ember_gate.jsonl"),
+    ("glimmer", "bare", "phase4b/scores_frozen_glimmer_bare.json", "phase4b/traces_frozen_glimmer_bare.jsonl"),
+    ("glimmer", "layer", "phase4/scores_frozen_glimmer_layer.json", "phase4/traces_frozen_glimmer_layer.jsonl"),
+    ("glimmer", "gate", "phase4/scores_frozen_glimmer_gate.json", "phase4/traces_frozen_glimmer_gate.jsonl"),
 ]
 
 
@@ -147,6 +157,21 @@ def main():
         ci("sonnet_gate", "ember_gate", "Gate gap Sonnet minus Ember (numeric)"),
         ci("sol_bare", "ember_bare", "Bare gap Sol minus Ember (numeric)"),
         ci("sol_gate", "ember_gate", "Gate gap Sol minus Ember (numeric)"),
+        # Glimmer addendum (Nov 16, 2026)
+        ci("glimmer_layer", "glimmer_bare", "Glimmer layer minus bare (numeric)"),
+        ci("glimmer_gate", "glimmer_layer", "Glimmer gate minus layer (numeric)"),
+        ci("glimmer_gate", "sonnet_bare", "Glimmer gate minus Sonnet bare (numeric, claim 1)"),
+        ci("glimmer_gate", "sol_bare", "Glimmer gate minus Sol bare (numeric, claim 1)"),
+        ci("glimmer_layer", "sonnet_bare", "Glimmer layer minus Sonnet bare (numeric)"),
+        ci("glimmer_layer", "ember_layer", "Glimmer layer minus Ember layer (numeric)"),
+        ci("glimmer_gate", "ember_gate", "Glimmer gate minus Ember gate (numeric)"),
+        ci("sonnet_bare", "glimmer_bare", "Bare gap Sonnet minus Glimmer (numeric)"),
+        ci("sonnet_layer", "glimmer_layer", "Layer gap Sonnet minus Glimmer (numeric)"),
+        ci("sonnet_gate", "glimmer_gate", "Gate gap Sonnet minus Glimmer (numeric)"),
+        ci("sol_bare", "glimmer_bare", "Bare gap Sol minus Glimmer (numeric)"),
+        ci("sol_gate", "glimmer_gate", "Gate gap Sol minus Glimmer (numeric)"),
+        ci("ember_bare", "glimmer_bare", "Bare gap Ember minus Glimmer (numeric)"),
+        ci("ember_layer", "glimmer_layer", "Layer gap Ember minus Glimmer (numeric)"),
     ]
     # compression: bare gap minus gate gap (paired, same questions)
     bare_gap = [x - y for x, y in zip(vecs["sonnet_bare"], vecs["ember_bare"])]
@@ -157,6 +182,23 @@ def main():
     cis.append({"label": "Compression: bare gap minus gate gap, Sonnet vs Ember (numeric)",
                 "diff_pp": round(sum(comp) / 64 * 100, 1),
                 "ci95_pp": [round(means[250] * 100, 1), round(means[9749] * 100, 1)]})
+
+    def paired_compression(a_gap, b_gap, label):
+        diff = [x - y for x, y in zip(a_gap, b_gap)]
+        rng = random.Random(0)
+        ms = sorted(sum(rng.choice(diff) for _ in range(64)) / 64 for _ in range(10000))
+        return {"label": label, "diff_pp": round(sum(diff) / 64 * 100, 1),
+                "ci95_pp": [round(ms[250] * 100, 1), round(ms[9749] * 100, 1)]}
+
+    # Compression: bare gap minus gate gap, Sonnet vs Glimmer (numeric)
+    bare_gap_g = [x - y for x, y in zip(vecs["sonnet_bare"], vecs["glimmer_bare"])]
+    gate_gap_g = [x - y for x, y in zip(vecs["sonnet_gate"], vecs["glimmer_gate"])]
+    cis.append(paired_compression(bare_gap_g, gate_gap_g,
+                                  "Compression: bare gap minus gate gap, Sonnet vs Glimmer (numeric)"))
+    # Compression: bare gap minus layer gap, Sonnet vs Glimmer (numeric)
+    layer_gap_g = [x - y for x, y in zip(vecs["sonnet_layer"], vecs["glimmer_layer"])]
+    cis.append(paired_compression(bare_gap_g, layer_gap_g,
+                                  "Compression: bare gap minus layer gap, Sonnet vs Glimmer (numeric)"))
 
     print(json.dumps({"cells": data, "bootstrap_cis": cis}, indent=1))
 
